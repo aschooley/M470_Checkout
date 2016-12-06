@@ -423,8 +423,25 @@ int main(void)
         for (; card < CARD_10; card++)
         {
             bsp_set_valve_power(card, ON);
-            sw_delay(1000);
+            sw_delay(100);
             bsp_set_valve_power(card, OFF);
+
+            bsp_set_card_power(card,ON);
+            sw_delay(100);
+            bsp_set_card_power(card,OFF);
+
+            bsp_set_cal_cell_power(card,CAL_CELL_MANIFOLD,ON);
+            sw_delay(100);
+            bsp_set_cal_cell_power(card,CAL_CELL_MANIFOLD,OFF);
+
+
+//			bsp_set_fluidics_power(card,ON);
+//            sw_delay(1000);
+//            bsp_set_fluidics_power(card,OFF);
+
+//			bsp_set_heater_power(card,ON);
+//            sw_delay(1000);
+//            bsp_set_heater_power(card,OFF);
         }
 
     }

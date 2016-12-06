@@ -99,17 +99,19 @@ void bsp_set_valve_power(card_t card, power_state_t state)
 
     card_manifold_address_t card_address    = bsp_card_get_card_location(card);
     uint16_t                address_bitmask = create_bitmask(card_address.index);
+    uint16_t latch_state = 0;
+    modify_bitfield(&latch_state, address_bitmask, state);
 
     if (CARD_BANK_1 == card_address.bank)
     {
         bsp_pin_digital_write(&pins.fluidics_en_latch_mani_1, DISABLED);
-        send_address(address_bitmask);
+        send_address(latch_state);
         bsp_pin_digital_write(&pins.fluidics_en_latch_mani_1, ENABLED);
     }
     else if (CARD_BANK_2 == card_address.bank)
     {
         bsp_pin_digital_write(&pins.fluidics_en_latch_mani_2, DISABLED);
-        send_address(address_bitmask);
+        send_address(latch_state);
         bsp_pin_digital_write(&pins.fluidics_en_latch_mani_2, ENABLED);
     }
     else
@@ -124,17 +126,19 @@ void bsp_set_card_power(card_t card, power_state_t state)
 
     card_manifold_address_t card_address    = bsp_card_get_card_location(card);
     uint16_t                address_bitmask = create_bitmask(card_address.index);
+    uint16_t latch_state = 0;
+    modify_bitfield(&latch_state, address_bitmask, state);
 
     if (CARD_BANK_1 == card_address.bank)
     {
         bsp_pin_digital_write(&pins.card_en_latch_1, DISABLED);
-        send_address(address_bitmask);
+        send_address(latch_state);
         bsp_pin_digital_write(&pins.card_en_latch_1, ENABLED);
     }
     else if (CARD_BANK_2 == card_address.bank)
     {
         bsp_pin_digital_write(&pins.card_en_latch_2, DISABLED);
-        send_address(address_bitmask);
+        send_address(latch_state);
         bsp_pin_digital_write(&pins.card_en_latch_2, ENABLED);
     }
     else
@@ -150,6 +154,7 @@ void bsp_set_cal_cell_power(card_t card, cal_cell_t cal_cell_type,
     // All we need is the bank.
     card_manifold_address_t card_address = bsp_card_get_card_location(card);
     uint16_t                address_bitmask;
+    uint16_t latch_state = 0;
 
     if (CAL_CELL_MANIFOLD == cal_cell_type || CAL_CELL_BAG == cal_cell_type)
     {
@@ -160,16 +165,18 @@ void bsp_set_cal_cell_power(card_t card, cal_cell_t cal_cell_type,
         logf(ERROR, "Invalid cal cell type.  Type = &d", cal_cell_type);
     }
 
+    modify_bitfield(&latch_state, address_bitmask, state);
+
     if (CARD_BANK_1 == card_address.bank)
     {
         bsp_pin_digital_write(&pins.card_en_latch_1, DISABLED);
-        send_address(address_bitmask);
+        send_address(latch_state);
         bsp_pin_digital_write(&pins.card_en_latch_1, ENABLED);
     }
     else if (CARD_BANK_2 == card_address.bank)
     {
         bsp_pin_digital_write(&pins.card_en_latch_2, DISABLED);
-        send_address(address_bitmask);
+        send_address(latch_state);
         bsp_pin_digital_write(&pins.card_en_latch_2, ENABLED);
     }
     else
@@ -314,10 +321,10 @@ static void send_address(uint16_t addr)
     {
         EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
         8000000,
-        8000000,
+        1000000,
         EUSCI_B_SPI_MSB_FIRST,
-        EUSCI_B_SPI_PHASE_DATA_CAPTURED_ONFIRST_CHANGED_ON_NEXT,
-        EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_LOW,
+		EUSCI_B_SPI_PHASE_DATA_CHANGED_ONFIRST_CAPTURED_ON_NEXT,
+		EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_HIGH,
         EUSCI_B_SPI_3PIN
     };
     // Initalize and enable the SPI port.
@@ -339,6 +346,12 @@ static void send_address(uint16_t addr)
     }
     // Send LSB
     EUSCI_B_SPI_transmitData(EUSCI_B0_BASE, LSB);
+
+    // Wait for the SPI port to be available.
+     while (EUSCI_B_SPI_isBusy(EUSCI_B0_BASE))
+     {
+         ;
+     }
 }
 
 static void modify_bitfield (uint16_t * bitfield, uint16_t bitmask,

@@ -218,22 +218,22 @@ extern "C" {
 
 //				name    		pin		type	default		enabled	alt_fcn
 #define pin_table \
-	pin_table_entry(fluidics_en_latch_bag_1,	PIN_51,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(heater_en_latch_bag_1, 		PIN_50,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(spi_cs_latch_bag_1, 		PIN_49,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(fluidics_en_latch_mani_1, 	PIN_48,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(fluidics_en_latch_bag_2,	PIN_52,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(heater_en_latch_bag_2, 		PIN_53,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(spi_cs_latch_bag_2, 		PIN_54,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(fluidics_en_latch_mani_2, 	PIN_55,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(card_en_latch_2, 			PIN_56,	OUTPUT,	ENABLED,	HIGH,	IO)	\
+	pin_table_entry(fluidics_en_latch_bag_1,	PIN_51,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(heater_en_latch_bag_1, 		PIN_50,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(spi_cs_latch_bag_1, 		PIN_49,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(fluidics_en_latch_mani_1, 	PIN_48,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(fluidics_en_latch_bag_2,	PIN_52,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(heater_en_latch_bag_2, 		PIN_53,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(spi_cs_latch_bag_2, 		PIN_54,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(fluidics_en_latch_mani_2, 	PIN_55,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(card_en_latch_2, 			PIN_56,	OUTPUT,	DISABLED,	HIGH,	IO)	\
 	pin_table_entry(rtd_start, 					PIN_35,	OUTPUT,	DISABLED,	HIGH,	IO)	\
-	pin_table_entry(spi_cs_latch_mani_2, 		PIN_36,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(heater_en_latch_mani2, 		PIN_38,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(cs_latch_clr, 				PIN_44,	OUTPUT,	DISABLED,	LOW,	IO)	\
-	pin_table_entry(card_en_latch_1, 			PIN_45,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(heater_en_latch_mani_1, 	PIN_46,	OUTPUT,	ENABLED,	HIGH,	IO)	\
-	pin_table_entry(spi_cs_latch_mani_1, 		PIN_47,	OUTPUT,	ENABLED,	HIGH,	IO)	\
+	pin_table_entry(spi_cs_latch_mani_2, 		PIN_36,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(heater_en_latch_mani2, 		PIN_38,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(cs_latch_clr, 				PIN_44,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(card_en_latch_1, 			PIN_45,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(heater_en_latch_mani_1, 	PIN_46,	OUTPUT,	DISABLED,	HIGH,	IO)	\
+	pin_table_entry(spi_cs_latch_mani_1, 		PIN_47,	OUTPUT,	DISABLED,	HIGH,	IO)	\
 	pin_table_entry(sda, 			PIN_96, OUTPUT, HIGH, 		NONE,	SECONDARY)	\
 	pin_table_entry(scl,			PIN_97,	OUTPUT,	HIGH,		NONE,	SECONDARY)	\
 	pin_table_entry(spi_clk,		PIN_2,	OUTPUT,	LOW,		NONE,	PRIMARY)	\
