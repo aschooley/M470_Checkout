@@ -426,13 +426,13 @@ int main(void)
             sw_delay(100);
             bsp_set_valve_power(card, OFF);
 
-            bsp_set_card_power(card,ON);
+            bsp_set_card_power(card, ON);
             sw_delay(100);
-            bsp_set_card_power(card,OFF);
+            bsp_set_card_power(card, OFF);
 
-            bsp_set_cal_cell_power(card,CAL_CELL_MANIFOLD,ON);
+            bsp_set_cal_cell_power(card, CAL_CELL_MANIFOLD, ON);
             sw_delay(100);
-            bsp_set_cal_cell_power(card,CAL_CELL_MANIFOLD,OFF);
+            bsp_set_cal_cell_power(card, CAL_CELL_MANIFOLD, OFF);
 
 
 //			bsp_set_fluidics_power(card,ON);

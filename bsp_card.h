@@ -3,7 +3,8 @@
 
 /**
  * @file bsp_card.h
- * @brief
+ * @brief Hardware translation between the logical payload object and their
+ * physical addressing inside the hardware.
  * @details
  * @copyright COPYRIGHT NOTICE: (c) 2015 NASA Ames Research Center
  * @note ROM: BioSentinel Bio Payload
@@ -30,6 +31,9 @@ extern "C" {
 // Public data type definitions (enum, struct, typedef, union)
 // *****************************************************************************
 
+/**
+ * Identify each card in the payload.
+ */
 typedef enum
 {
     CARD_1,
@@ -53,6 +57,9 @@ typedef enum
     CARD_COUNT
 } card_t;
 
+/**
+ * Identify each thermal heater zone in the payload.
+ */
 typedef enum
 {
     THERMAL_ZONE_CARD_1,
@@ -82,6 +89,9 @@ typedef enum
     THERMAL_ZONE_COUNT
 } thermal_zone_t;
 
+/**
+ * Identify the different manifold halves.
+ */
 typedef enum
 {
     CARD_BANK_1,
@@ -89,6 +99,9 @@ typedef enum
     CARD_BANK_COUNT
 } card_bank_t;
 
+/**
+ * Identify the different pcb locations.
+ */
 typedef enum
 {
     BOX_CARD,
@@ -96,11 +109,17 @@ typedef enum
     BOX_COUNT
 } box_t;
 
+/**
+ * Everything needed to address a logical object.
+ */
 typedef struct
 {
+    /** Which half of the payload it is in. */
     card_bank_t bank;
-    uint8_t     index;
-    box_t       box;
+    /** Which address it is on the shift register. */
+    uint8_t index;
+    /** Which board it is on. */
+    box_t box;
 } card_manifold_address_t;
 
 // *****************************************************************************
@@ -111,8 +130,18 @@ typedef struct
 // Public function prototypes
 // *****************************************************************************
 
+/**
+ * Translates a logcial card to its physical signal address in the hardware.
+ * @param[in] card that you want to know the signal address of.
+ * @return structure that hold the information to address the card.
+ */
 card_manifold_address_t bsp_card_get_card_location (card_t card);
 
+/**
+ * Translates a logical heater to its physical signal address in the hardware.
+ * @param[in] zone that you want to know the signal address of.
+ * @return structure that holds the information to address that zone.
+ */
 card_manifold_address_t bsp_card_get_thermal_location (thermal_zone_t zone);
 
 // *****************************************************************************

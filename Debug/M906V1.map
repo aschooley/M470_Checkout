@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker Unix v4.4.7                    
 ******************************************************************************
->> Linked Tue Dec  6 11:50:58 2016
+>> Linked Tue Dec  6 15:13:42 2016
 
 OUTPUT FILE NAME:   <M906V1.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs_noexit"  address: 00007438
+ENTRY POINT SYMBOL: "_c_int00_noargs_noexit"  address: 00007446
 
 
 MEMORY CONFIGURATION
@@ -19,7 +19,7 @@ MEMORY CONFIGURATION
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   RAM                   00001c00   00000800  00000000  00000800  RWIX
-  FRAM                  00004400   0000bb80  00003e16  00007d6a  RWIX
+  FRAM                  00004400   0000bb80  00003e64  00007d1c  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   IPESIGNATURE          0000ff88   00000008  00000008  00000000  RWIX  ffff 
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00014000  00005086  0000ef7a  RWIX
+  FRAM2                 00010000   00014000  000050f6  0000ef0a  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -104,48 +104,49 @@ section   page    origin      length       input sections
 .ipe:_isr 
 *          0    00004400    00000000     UNINITIALIZED
 
-.data      0    00006fa0    00000294     UNINITIALIZED
+.data      0    00006fa0    000002a2     UNINITIALIZED
                   00006fa0    000000c8     rts430x_lc_rd_eabi.lib : defs.obj (.data:_ftable)
                   00007068    000000b0                            : signal.obj (.data:sigtable)
                   00007118    00000080                            : xvalues.obj (.data)
                   00007198    0000006c     do_stuff.obj (.data)
                   00007204    00000018     util_log.obj (.data)
-                  0000721c    00000008     rts430x_lc_rd_eabi.lib : feraiseexcept.obj (.data)
-                  00007224    00000004                            : _lock.obj (.data:_lock)
-                  00007228    00000004                            : _lock.obj (.data:_unlock)
-                  0000722c    00000004     drv_logger.obj (.data)
-                  00007230    00000002     rts430x_lc_rd_eabi.lib : errno.obj (.data)
-                  00007232    00000002                            : memory.obj (.data)
+                  0000721c    0000000e     bsp_latches.obj (.data)
+                  0000722a    00000008     rts430x_lc_rd_eabi.lib : feraiseexcept.obj (.data)
+                  00007232    00000004                            : _lock.obj (.data:_lock)
+                  00007236    00000004                            : _lock.obj (.data:_unlock)
+                  0000723a    00000004     drv_logger.obj (.data)
+                  0000723e    00000002     rts430x_lc_rd_eabi.lib : errno.obj (.data)
+                  00007240    00000002                            : memory.obj (.data)
 
-.cinit     0    0000816c    000000aa     
-                  0000816c    00000087     (.cinit..data.load) [load image, compression = rle]
-                  000081f3    00000001     --HOLE-- [fill = 0]
-                  000081f4    0000000c     (__TI_handler_table)
-                  00008200    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  00008206    00000010     (__TI_cinit_table)
+.cinit     0    000081b6    000000ae     
+                  000081b6    0000008b     (.cinit..data.load) [load image, compression = rle]
+                  00008241    00000001     --HOLE-- [fill = 0]
+                  00008242    0000000c     (__TI_handler_table)
+                  0000824e    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  00008254    00000010     (__TI_cinit_table)
 
 .init_array 
 *          0    00004400    00000000     UNINITIALIZED
 
 .text:_isr 
-*          0    00007234    00000238     
-                  00007234    0000010e     do_stuff.obj (.text:_isr:TA0IV_ISR)
-                  00007342    0000006a     do_stuff.obj (.text:_isr:TIMER0_A0_ISR)
-                  000073ac    0000005a     bsp_uart.obj (.text:_isr:USCI_A1_ISR)
-                  00007406    00000032     bsp_uart.obj (.text:_isr:USCI_A0_ISR)
-                  00007438    0000001a     rts430x_lc_rd_eabi.lib : boot_special.obj (.text:_isr:_c_int00_noargs_noexit)
-                  00007452    00000012     do_stuff.obj (.text:_isr:RTC_ISR)
-                  00007464    00000006     rts430x_lc_rd_eabi.lib : isr_trap.obj (.text:_isr:__TI_ISR_TRAP)
-                  0000746a    00000002     do_stuff.obj (.text:_isr:TACCR1_ISR)
+*          0    00007242    00000238     
+                  00007242    0000010e     do_stuff.obj (.text:_isr:TA0IV_ISR)
+                  00007350    0000006a     do_stuff.obj (.text:_isr:TIMER0_A0_ISR)
+                  000073ba    0000005a     bsp_uart.obj (.text:_isr:USCI_A1_ISR)
+                  00007414    00000032     bsp_uart.obj (.text:_isr:USCI_A0_ISR)
+                  00007446    0000001a     rts430x_lc_rd_eabi.lib : boot_special.obj (.text:_isr:_c_int00_noargs_noexit)
+                  00007460    00000012     do_stuff.obj (.text:_isr:RTC_ISR)
+                  00007472    00000006     rts430x_lc_rd_eabi.lib : isr_trap.obj (.text:_isr:__TI_ISR_TRAP)
+                  00007478    00000002     do_stuff.obj (.text:_isr:TACCR1_ISR)
 
-.bss       0    0000746c    000001b4     UNINITIALIZED
-                  0000746c    00000193     (.common:g)
-                  000075ff    00000001     --HOLE--
-                  00007600    00000012     (.common:pool$1)
-                  00007612    00000004     (.common:curr_vla_pool)
-                  00007616    00000004     (.common:sys_base)
-                  0000761a    00000004     (.common:sys_free)
-                  0000761e    00000002     (.common:memsize)
+.bss       0    0000747a    000001b4     UNINITIALIZED
+                  0000747a    00000193     (.common:g)
+                  0000760d    00000001     --HOLE--
+                  0000760e    00000012     (.common:pool$1)
+                  00007620    00000004     (.common:curr_vla_pool)
+                  00007624    00000004     (.common:sys_base)
+                  00007628    00000004     (.common:sys_free)
+                  0000762c    00000002     (.common:memsize)
 
 .stack     0    00006000    00000fa0     UNINITIALIZED
                   00006000    00000004     rts430x_lc_rd_eabi.lib : boot.obj (.stack)
@@ -257,22 +258,22 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.const     0    00007620    00000b4c     
-                  00007620    0000042c     bsp_latches.obj (.const)
-                  00007a4c    0000041a     bsp_pins.obj (.const:init_pin_table$1)
-                  00007e66    00000101     rts430x_lc_rd_eabi.lib : ctype.obj (.const:.string:_ctypes_)
-                  00007f67    00000001     --HOLE-- [fill = 0]
-                  00007f68    000000cc     bsp_latches.obj (.const:.string)
-                  00008034    00000048     bsp_card.obj (.const:.string)
-                  0000807c    00000036     rts430x_lc_rd_eabi.lib : vla_alloc.obj (.const:.string)
-                  000080b2    00000032     util_log.obj (.const:.string)
-                  000080e4    00000026     rts430x_lc_rd_eabi.lib : _printfi.obj (.const:.string)
-                  0000810a    00000022     bsp_uart.obj (.const:.string)
-                  0000812c    00000022     bsp_uart.obj (.const)
-                  0000814e    00000012     drv_logger.obj (.const:.string)
-                  00008160    0000000c     util_log.obj (.const:LEVEL_STRINGS)
+.const     0    0000762e    00000b88     
+                  0000762e    0000042c     bsp_latches.obj (.const)
+                  00007a5a    0000041a     bsp_pins.obj (.const:init_pin_table$1)
+                  00007e74    00000108     bsp_latches.obj (.const:.string)
+                  00007f7c    00000101     rts430x_lc_rd_eabi.lib : ctype.obj (.const:.string:_ctypes_)
+                  0000807d    00000001     --HOLE-- [fill = 0]
+                  0000807e    00000048     bsp_card.obj (.const:.string)
+                  000080c6    00000036     rts430x_lc_rd_eabi.lib : vla_alloc.obj (.const:.string)
+                  000080fc    00000032     util_log.obj (.const:.string)
+                  0000812e    00000026     rts430x_lc_rd_eabi.lib : _printfi.obj (.const:.string)
+                  00008154    00000022     bsp_uart.obj (.const:.string)
+                  00008176    00000022     bsp_uart.obj (.const)
+                  00008198    00000012     drv_logger.obj (.const:.string)
+                  000081aa    0000000c     util_log.obj (.const:LEVEL_STRINGS)
 
-.text      0    00010000    00005086     
+.text      0    00010000    000050f6     
                   00010000    00000452     rts430x_lc_rd_eabi.lib : frcdivd.obj (.text:__TI_frcdivd)
                   00010452    0000039a                            : div64u.obj (.text:__mspabi_divull)
                   000107ec    000002e4                            : frcmpyd.obj (.text:__TI_frcmpyd)
@@ -294,137 +295,137 @@ SYSNMI     0    0000fffc    00000002
                   00012a24    0000016e                            : _printfi.obj (.text:_pconv_a)
                   00012b92    00000148                            : _printfi.obj (.text:_pproc_diouxp)
                   00012cda    00000144                            : memory.obj (.text:realloc)
-                  00012e1e    0000010c     util_log.obj (.text:util_log)
-                  00012f2a    00000104     bsp_pins.obj (.text:bsp_pin_digital_write)
-                  0001302e    00000100     rts430x_lc_rd_eabi.lib : xdnorm.obj (.text:_Dnorm)
-                  0001312e    000000fc                            : _printfi.obj (.text:_pconv_g)
-                  0001322a    000000fa                            : _printfi.obj (.text:_pproc_fwp)
-                  00013324    000000ec     bsp_pins.obj (.text:bsp_pin_set_mode)
-                  00013410    000000d8     rts430x_lc_rd_eabi.lib : cmpd.obj (.text:__mspabi_cmpd)
-                  000134e8    000000ce     bsp_latches.obj (.text:bsp_set_cal_cell_power)
-                  000135b6    000000c6     rts430x_lc_rd_eabi.lib : vla_alloc.obj (.text:__vla_dealloc)
-                  0001367c    000000ba                            : memory.obj (.text:malloc)
-                  00013736    000000b2                            : renormd.obj (.text:__TI_renormd)
-                  000137e8    000000a8                            : vla_alloc.obj (.text:_Z21free_dead_allocationsPv)
-                  00013890    000000a8                            : _printfi.obj (.text:_pproc_str)
-                  00013938    000000a4     bsp_latches.obj (.text:bsp_set_card_power)
-                  000139dc    000000a4     bsp_latches.obj (.text:bsp_set_valve_power)
-                  00013a80    0000009e     rts430x_lc_rd_eabi.lib : _printfi.obj (.text:_ltostr)
-                  00013b1e    0000009a     eusci_a_uart.obj (.text:EUSCI_A_UART_init)
-                  00013bb8    00000094     rts430x_lc_rd_eabi.lib : fltlid.obj (.text:__mspabi_fltlid)
-                  00013c4c    00000094                            : _printfi.obj (.text:_ecpy)
-                  00013ce0    00000092     bsp_uart.obj (.text:init_uart)
-                  00013d72    00000090     rts430x_lc_rd_eabi.lib : _printfi.obj (.text:_mcpy)
-                  00013e02    0000008e                            : memory.obj (.text:free)
-                  00013e90    00000088                            : _printfi.obj (.text:_div)
-                  00013f18    00000088     main.obj (.text:main)
-                  00013fa0    00000086     rts430x_lc_rd_eabi.lib : ldexp.obj (.text:ldexp)
-                  00014026    00000080                            : ltoa.obj (.text:ltoa)
-                  000140a6    00000078                            : _printfi.obj (.text:_pconv_f)
-                  0001411e    00000072                            : xdunscal.obj (.text:_Dunscale)
-                  00014190    00000070     bsp_latches.obj (.text:send_address)
-                  00014200    0000006e     bsp_card.obj (.text:bsp_card_get_card_location)
-                  0001426e    0000006c     rts430x_lc_rd_eabi.lib : autoinit_wdt.obj (.text:_auto_init_hold_wdt)
-                  000142da    00000068                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
-                  00014342    00000066     cs.obj (.text:CS_initClockSignal)
-                  000143a8    00000066     rts430x_lc_rd_eabi.lib : fixdli.obj (.text:__mspabi_fixdli)
-                  0001440e    00000062                            : atoi.obj (.text:atoi)
-                  00014470    00000062                            : snprintf.obj (.text:snprintf)
-                  000144d2    00000060     bsp_uart.obj (.text:cout_data_channel)
-                  00014532    00000058     rts430x_lc_rd_eabi.lib : div32u.obj (.text)
-                  0001458a    00000056     eusci_b_spi.obj (.text:EUSCI_B_SPI_initMaster)
-                  000145e0    00000056     rts430x_lc_rd_eabi.lib : vsnprintf.obj (.text:vsnprintf)
-                  00014636    00000050                            : xdclass.obj (.text:_Dclass)
-                  00014686    00000050                            : fprintf.obj (.text:fprintf)
-                  000146d6    0000004e                            : _printfi.obj (.text:_fcpy)
-                  00014724    00000046                            : _printfi.obj (.text:_pproc_fflags)
-                  0001476a    00000044                            : vla_alloc.obj (.text:_Z18init_curr_vla_poolv)
-                  000147ae    00000044                            : vla_alloc.obj (.text:_Z31increase_curr_vla_pool_capacityv)
-                  000147f2    00000042                            : frexp.obj (.text:frexp)
-                  00014834    00000042                            : memory.obj (.text:minit)
-                  00014876    00000040                            : div32s.obj (.text)
-                  000148b6    0000003e                            : _printfi.obj (.text:incr_hex)
-                  000148f4    0000003e                            : asr32.obj (.text:l_asr_const)
-                  00014932    0000003e                            : lsl32.obj (.text:l_lsl_const)
-                  00014970    0000003e                            : lsr32.obj (.text:l_lsr_const)
-                  000149ae    0000003c     bsp_uart.obj (.text:fputs)
-                  000149ea    0000003a     rts430x_lc_rd_eabi.lib : lsl64.obj (.text:__mspabi_sllll)
-                  00014a24    0000003a                            : lsr64.obj (.text:__mspabi_srlll)
-                  00014a5e    0000003a     bsp_latches.obj (.text:modify_bitfield)
-                  00014a98    00000038     rts430x_lc_rd_eabi.lib : signal.obj (.text:signal)
-                  00014ad0    00000036                            : xferaise.obj (.text:_Feraise)
-                  00014b06    00000036                            : snprintf.obj (.text:_outs)
-                  00014b3c    00000036                            : vsnprintf.obj (.text:_outs)
-                  00014b72    00000034                            : feraiseexcept.obj (.text:feraiseexcept)
-                  00014ba6    00000032                            : subd.obj (.text:__mspabi_subd)
-                  00014bd8    00000032                            : raise.obj (.text:raise)
-                  00014c0a    00000030     drv_logger.obj (.text:logger_init)
-                  00014c3a    0000002e     rts430x_lc_rd_eabi.lib : negd.obj (.text:__mspabi_negd)
-                  00014c68    0000002c     bsp_pins.obj (.text:bsp_pins_initalize)
-                  00014c94    0000002a     util_log.obj (.text:util_log_init)
-                  00014cbe    00000028     rts430x_lc_rd_eabi.lib : fixdi.obj (.text:__mspabi_fixdi)
-                  00014ce6    00000028     main.obj (.text:sw_delay)
-                  00014d0e    00000026     bsp_pins.obj (.text:bsp_pin_setup)
-                  00014d34    00000024     main.obj (.text:Init_Clock)
-                  00014d58    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  00014d7c    00000024     drv_logger.obj (.text:get_time)
-                  00014da0    00000022     eusci_a_uart.obj (.text:EUSCI_A_UART_disableInterrupt)
-                  00014dc2    00000022     eusci_a_uart.obj (.text:EUSCI_A_UART_enableInterrupt)
-                  00014de4    00000022     eusci_a_uart.obj (.text:EUSCI_A_UART_transmitData)
-                  00014e06    00000022     bsp_uart.obj (.text:fputc)
-                  00014e28    00000022     rts430x_lc_rd_eabi.lib : mult32_f5hw.obj (.text)
-                  00014e4a    00000020     eusci_a_uart.obj (.text:EUSCI_A_UART_receiveData)
-                  00014e6a    00000020     rts430x_lc_rd_eabi.lib : snprintf.obj (.text:_outc)
-                  00014e8a    00000020                            : vsnprintf.obj (.text:_outc)
-                  00014eaa    00000020                            : _printfi.obj (.text:val_hex)
-                  00014eca    0000001e                            : memccpy.obj (.text:memccpy)
-                  00014ee8    0000001c                            : strchr.obj (.text:strchr)
-                  00014f04    00000016                            : memset.obj (.text:memset)
-                  00014f1a    00000016                            : div16u.obj (.text)
-                  00014f30    00000016                            : mult16_f5hw.obj (.text)
-                  00014f46    00000014     drv_logger.obj (.text:info_logger_log)
-                  00014f5a    00000014     rts430x_lc_rd_eabi.lib : memcpy.obj (.text:memcpy)
-                  00014f6e    00000012     cs.obj (.text:CS_setDCOFreq)
-                  00014f80    00000012     rts430x_lc_rd_eabi.lib : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
-                  00014f92    00000012                            : toupper.obj (.text:toupper)
-                  00014fa4    00000010                            : asr32.obj (.text:l_asr)
-                  00014fb4    00000010                            : lsl32.obj (.text:l_lsl)
-                  00014fc4    00000010                            : lsr32.obj (.text:l_lsr)
-                  00014fd4    0000000e                            : strlen.obj (.text:strlen)
-                  00014fe2    0000000c     eusci_b_spi.obj (.text:EUSCI_B_SPI_transmitData)
-                  00014fee    0000000c     timer_a.obj (.text:Timer_A_disableCaptureCompareInterrupt)
-                  00014ffa    0000000c     rts430x_lc_rd_eabi.lib : fltid.obj (.text:__mspabi_fltid)
-                  00015006    0000000a     eusci_a_uart.obj (.text:EUSCI_A_UART_getInterruptStatus)
-                  00015010    0000000a     eusci_b_spi.obj (.text:EUSCI_B_SPI_isBusy)
-                  0001501a    0000000a     rts430x_lc_rd_eabi.lib : abs.obj (.text:abs)
-                  00015024    0000000a                            : lsl16.obj (.text)
-                  0001502e    0000000a                            : lsr16.obj (.text)
-                  00015038    00000008     timer_a.obj (.text:Timer_A_stop)
-                  00015040    00000008     drv_logger.obj (.text:error_logger_log)
-                  00015048    00000008     drv_logger.obj (.text:trace_logger_log)
-                  00015050    00000006     eusci_a_uart.obj (.text:EUSCI_A_UART_enable)
-                  00015056    00000006     eusci_b_spi.obj (.text:EUSCI_B_SPI_enable)
-                  0001505c    00000006     timer_a.obj (.text:Timer_A_clear)
-                  00015062    00000006     timer_a.obj (.text:Timer_A_disableInterrupt)
-                  00015068    00000006     rts430x_lc_rd_eabi.lib : fprintf.obj (.text:_outc)
-                  0001506e    00000006                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
-                  00015074    00000004                            : error.obj (.text:__abort_execution)
-                  00015078    00000004                            : fprintf.obj (.text:_outs)
-                  0001507c    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  00015080    00000004                            : exit.obj (.text:abort)
-                  00015084    00000002                            : _lock.obj (.text:_nop)
+                  00012e1e    00000114     bsp_latches.obj (.text:bsp_set_valve_power)
+                  00012f32    0000010c     util_log.obj (.text:util_log)
+                  0001303e    00000104     bsp_pins.obj (.text:bsp_pin_digital_write)
+                  00013142    00000100     rts430x_lc_rd_eabi.lib : xdnorm.obj (.text:_Dnorm)
+                  00013242    000000fc                            : _printfi.obj (.text:_pconv_g)
+                  0001333e    000000fa                            : _printfi.obj (.text:_pproc_fwp)
+                  00013438    000000ec     bsp_pins.obj (.text:bsp_pin_set_mode)
+                  00013524    000000d8     rts430x_lc_rd_eabi.lib : cmpd.obj (.text:__mspabi_cmpd)
+                  000135fc    000000ce     bsp_latches.obj (.text:bsp_set_cal_cell_power)
+                  000136ca    000000c6     rts430x_lc_rd_eabi.lib : vla_alloc.obj (.text:__vla_dealloc)
+                  00013790    000000ba                            : memory.obj (.text:malloc)
+                  0001384a    000000b2                            : renormd.obj (.text:__TI_renormd)
+                  000138fc    000000a8                            : vla_alloc.obj (.text:_Z21free_dead_allocationsPv)
+                  000139a4    000000a8                            : _printfi.obj (.text:_pproc_str)
+                  00013a4c    000000a4     bsp_latches.obj (.text:bsp_set_card_power)
+                  00013af0    0000009e     rts430x_lc_rd_eabi.lib : _printfi.obj (.text:_ltostr)
+                  00013b8e    0000009a     eusci_a_uart.obj (.text:EUSCI_A_UART_init)
+                  00013c28    00000094     rts430x_lc_rd_eabi.lib : fltlid.obj (.text:__mspabi_fltlid)
+                  00013cbc    00000094                            : _printfi.obj (.text:_ecpy)
+                  00013d50    00000092     bsp_uart.obj (.text:init_uart)
+                  00013de2    00000090     rts430x_lc_rd_eabi.lib : _printfi.obj (.text:_mcpy)
+                  00013e72    0000008e                            : memory.obj (.text:free)
+                  00013f00    00000088                            : _printfi.obj (.text:_div)
+                  00013f88    00000088     main.obj (.text:main)
+                  00014010    00000086     rts430x_lc_rd_eabi.lib : ldexp.obj (.text:ldexp)
+                  00014096    00000080                            : ltoa.obj (.text:ltoa)
+                  00014116    00000078                            : _printfi.obj (.text:_pconv_f)
+                  0001418e    00000072                            : xdunscal.obj (.text:_Dunscale)
+                  00014200    00000070     bsp_latches.obj (.text:send_address)
+                  00014270    0000006e     bsp_card.obj (.text:bsp_card_get_card_location)
+                  000142de    0000006c     rts430x_lc_rd_eabi.lib : autoinit_wdt.obj (.text:_auto_init_hold_wdt)
+                  0001434a    00000068                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
+                  000143b2    00000066     cs.obj (.text:CS_initClockSignal)
+                  00014418    00000066     rts430x_lc_rd_eabi.lib : fixdli.obj (.text:__mspabi_fixdli)
+                  0001447e    00000062                            : atoi.obj (.text:atoi)
+                  000144e0    00000062                            : snprintf.obj (.text:snprintf)
+                  00014542    00000060     bsp_uart.obj (.text:cout_data_channel)
+                  000145a2    00000058     rts430x_lc_rd_eabi.lib : div32u.obj (.text)
+                  000145fa    00000056     eusci_b_spi.obj (.text:EUSCI_B_SPI_initMaster)
+                  00014650    00000056     rts430x_lc_rd_eabi.lib : vsnprintf.obj (.text:vsnprintf)
+                  000146a6    00000050                            : xdclass.obj (.text:_Dclass)
+                  000146f6    00000050                            : fprintf.obj (.text:fprintf)
+                  00014746    0000004e                            : _printfi.obj (.text:_fcpy)
+                  00014794    00000046                            : _printfi.obj (.text:_pproc_fflags)
+                  000147da    00000044                            : vla_alloc.obj (.text:_Z18init_curr_vla_poolv)
+                  0001481e    00000044                            : vla_alloc.obj (.text:_Z31increase_curr_vla_pool_capacityv)
+                  00014862    00000042                            : frexp.obj (.text:frexp)
+                  000148a4    00000042                            : memory.obj (.text:minit)
+                  000148e6    00000040                            : div32s.obj (.text)
+                  00014926    0000003e                            : _printfi.obj (.text:incr_hex)
+                  00014964    0000003e                            : asr32.obj (.text:l_asr_const)
+                  000149a2    0000003e                            : lsl32.obj (.text:l_lsl_const)
+                  000149e0    0000003e                            : lsr32.obj (.text:l_lsr_const)
+                  00014a1e    0000003c     bsp_uart.obj (.text:fputs)
+                  00014a5a    0000003a     rts430x_lc_rd_eabi.lib : lsl64.obj (.text:__mspabi_sllll)
+                  00014a94    0000003a                            : lsr64.obj (.text:__mspabi_srlll)
+                  00014ace    0000003a     bsp_latches.obj (.text:modify_bitfield)
+                  00014b08    00000038     rts430x_lc_rd_eabi.lib : signal.obj (.text:signal)
+                  00014b40    00000036                            : xferaise.obj (.text:_Feraise)
+                  00014b76    00000036                            : snprintf.obj (.text:_outs)
+                  00014bac    00000036                            : vsnprintf.obj (.text:_outs)
+                  00014be2    00000034                            : feraiseexcept.obj (.text:feraiseexcept)
+                  00014c16    00000032                            : subd.obj (.text:__mspabi_subd)
+                  00014c48    00000032                            : raise.obj (.text:raise)
+                  00014c7a    00000030     drv_logger.obj (.text:logger_init)
+                  00014caa    0000002e     rts430x_lc_rd_eabi.lib : negd.obj (.text:__mspabi_negd)
+                  00014cd8    0000002c     bsp_pins.obj (.text:bsp_pins_initalize)
+                  00014d04    0000002a     util_log.obj (.text:util_log_init)
+                  00014d2e    00000028     rts430x_lc_rd_eabi.lib : fixdi.obj (.text:__mspabi_fixdi)
+                  00014d56    00000028     main.obj (.text:sw_delay)
+                  00014d7e    00000026     bsp_pins.obj (.text:bsp_pin_setup)
+                  00014da4    00000024     main.obj (.text:Init_Clock)
+                  00014dc8    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  00014dec    00000024     drv_logger.obj (.text:get_time)
+                  00014e10    00000022     eusci_a_uart.obj (.text:EUSCI_A_UART_disableInterrupt)
+                  00014e32    00000022     eusci_a_uart.obj (.text:EUSCI_A_UART_enableInterrupt)
+                  00014e54    00000022     eusci_a_uart.obj (.text:EUSCI_A_UART_transmitData)
+                  00014e76    00000022     bsp_uart.obj (.text:fputc)
+                  00014e98    00000022     rts430x_lc_rd_eabi.lib : mult32_f5hw.obj (.text)
+                  00014eba    00000020     eusci_a_uart.obj (.text:EUSCI_A_UART_receiveData)
+                  00014eda    00000020     rts430x_lc_rd_eabi.lib : snprintf.obj (.text:_outc)
+                  00014efa    00000020                            : vsnprintf.obj (.text:_outc)
+                  00014f1a    00000020                            : _printfi.obj (.text:val_hex)
+                  00014f3a    0000001e                            : memccpy.obj (.text:memccpy)
+                  00014f58    0000001c                            : strchr.obj (.text:strchr)
+                  00014f74    00000016                            : memset.obj (.text:memset)
+                  00014f8a    00000016                            : div16u.obj (.text)
+                  00014fa0    00000016                            : mult16_f5hw.obj (.text)
+                  00014fb6    00000014     drv_logger.obj (.text:info_logger_log)
+                  00014fca    00000014     rts430x_lc_rd_eabi.lib : memcpy.obj (.text:memcpy)
+                  00014fde    00000012     cs.obj (.text:CS_setDCOFreq)
+                  00014ff0    00000012     rts430x_lc_rd_eabi.lib : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
+                  00015002    00000012                            : toupper.obj (.text:toupper)
+                  00015014    00000010                            : asr32.obj (.text:l_asr)
+                  00015024    00000010                            : lsl32.obj (.text:l_lsl)
+                  00015034    00000010                            : lsr32.obj (.text:l_lsr)
+                  00015044    0000000e                            : strlen.obj (.text:strlen)
+                  00015052    0000000c     eusci_b_spi.obj (.text:EUSCI_B_SPI_transmitData)
+                  0001505e    0000000c     timer_a.obj (.text:Timer_A_disableCaptureCompareInterrupt)
+                  0001506a    0000000c     rts430x_lc_rd_eabi.lib : fltid.obj (.text:__mspabi_fltid)
+                  00015076    0000000a     eusci_a_uart.obj (.text:EUSCI_A_UART_getInterruptStatus)
+                  00015080    0000000a     eusci_b_spi.obj (.text:EUSCI_B_SPI_isBusy)
+                  0001508a    0000000a     rts430x_lc_rd_eabi.lib : abs.obj (.text:abs)
+                  00015094    0000000a                            : lsl16.obj (.text)
+                  0001509e    0000000a                            : lsr16.obj (.text)
+                  000150a8    00000008     timer_a.obj (.text:Timer_A_stop)
+                  000150b0    00000008     drv_logger.obj (.text:error_logger_log)
+                  000150b8    00000008     drv_logger.obj (.text:trace_logger_log)
+                  000150c0    00000006     eusci_a_uart.obj (.text:EUSCI_A_UART_enable)
+                  000150c6    00000006     eusci_b_spi.obj (.text:EUSCI_B_SPI_enable)
+                  000150cc    00000006     timer_a.obj (.text:Timer_A_clear)
+                  000150d2    00000006     timer_a.obj (.text:Timer_A_disableInterrupt)
+                  000150d8    00000006     rts430x_lc_rd_eabi.lib : fprintf.obj (.text:_outc)
+                  000150de    00000006                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
+                  000150e4    00000004                            : error.obj (.text:__abort_execution)
+                  000150e8    00000004                            : fprintf.obj (.text:_outs)
+                  000150ec    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  000150f0    00000004                            : exit.obj (.text:abort)
+                  000150f4    00000002                            : _lock.obj (.text:_nop)
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00008206 records: 2, size/record: 8, table size: 16
-	.data: load addr=0000816c, load size=00000087 bytes, run addr=00006fa0, run size=00000294 bytes, compression=rle
-	.bss: load addr=00008200, load size=00000006 bytes, run addr=0000746c, run size=000001b4 bytes, compression=zero_init
+__TI_cinit_table @ 00008254 records: 2, size/record: 8, table size: 16
+	.data: load addr=000081b6, load size=0000008b bytes, run addr=00006fa0, run size=000002a2 bytes, compression=rle
+	.bss: load addr=0000824e, load size=00000006 bytes, run addr=0000747a, run size=000001b4 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 000081f4 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00008242 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_rle24
 	index: 2, handler: __TI_decompress_none
@@ -691,7 +692,7 @@ address   name
 000009ce  AESAXIN_L                             
 000004be  BCD2BIN                               
 000004bc  BIN2BCD                               
-00015080  C$$EXIT                               
+000150f0  C$$EXIT                               
 0000043e  CAPTIO0CTL                            
 0000043f  CAPTIO0CTL_H                          
 0000043e  CAPTIO0CTL_L                          
@@ -794,8 +795,8 @@ address   name
 0000016c  CSCTL6                                
 0000016d  CSCTL6_H                              
 0000016c  CSCTL6_L                              
-00014342  CS_initClockSignal                    
-00014f6e  CS_setDCOFreq                         
+000143b2  CS_initClockSignal                    
+00014fde  CS_setDCOFreq                         
 00000510  DMA0CTL                               
 00000511  DMA0CTL_H                             
 00000510  DMA0CTL_L                             
@@ -1176,17 +1177,17 @@ address   name
 00000d72  ESITSM9_L                             
 00000d25  ESITSM_H                              
 00000d24  ESITSM_L                              
-00014da0  EUSCI_A_UART_disableInterrupt         
-00015050  EUSCI_A_UART_enable                   
-00014dc2  EUSCI_A_UART_enableInterrupt          
-00015006  EUSCI_A_UART_getInterruptStatus       
-00013b1e  EUSCI_A_UART_init                     
-00014e4a  EUSCI_A_UART_receiveData              
-00014de4  EUSCI_A_UART_transmitData             
-00015056  EUSCI_B_SPI_enable                    
-0001458a  EUSCI_B_SPI_initMaster                
-00015010  EUSCI_B_SPI_isBusy                    
-00014fe2  EUSCI_B_SPI_transmitData              
+00014e10  EUSCI_A_UART_disableInterrupt         
+000150c0  EUSCI_A_UART_enable                   
+00014e32  EUSCI_A_UART_enableInterrupt          
+00015076  EUSCI_A_UART_getInterruptStatus       
+00013b8e  EUSCI_A_UART_init                     
+00014eba  EUSCI_A_UART_receiveData              
+00014e54  EUSCI_A_UART_transmitData             
+000150c6  EUSCI_B_SPI_enable                    
+000145fa  EUSCI_B_SPI_initMaster                
+00015080  EUSCI_B_SPI_isBusy                    
+00015052  EUSCI_B_SPI_transmitData              
 00000140  FRCTL0                                
 00000141  FRCTL0_H                              
 00000140  FRCTL0_L                              
@@ -1196,7 +1197,7 @@ address   name
 00000146  GCCTL1                                
 00000147  GCCTL1_H                              
 00000146  GCCTL1_L                              
-00014d34  Init_Clock                            
+00014da4  Init_Clock                            
 00000a40  LCDBM1                                
 00000a49  LCDBM10                               
 00000a4a  LCDBM11                               
@@ -1583,7 +1584,7 @@ address   name
 000004b6  RTCYEAR                               
 000004b7  RTCYEAR_H                             
 000004b6  RTCYEAR_L                             
-00007452  RTC_ISR                               
+00007460  RTC_ISR                               
 00000100  SFRIE1                                
 00000101  SFRIE1_H                              
 00000100  SFRIE1_L                              
@@ -1632,7 +1633,7 @@ address   name
 00000340  TA0CTL                                
 00000360  TA0EX0                                
 0000036e  TA0IV                                 
-00007234  TA0IV_ISR                             
+00007242  TA0IV_ISR                             
 00000350  TA0R                                  
 00000392  TA1CCR0                               
 00000394  TA1CCR1                               
@@ -1666,7 +1667,7 @@ address   name
 00000460  TA3EX0                                
 0000046e  TA3IV                                 
 00000450  TA3R                                  
-0000746a  TACCR1_ISR                            
+00007478  TACCR1_ISR                            
 000003d2  TB0CCR0                               
 000003d4  TB0CCR1                               
 000003d6  TB0CCR2                               
@@ -1685,11 +1686,11 @@ address   name
 000003e0  TB0EX0                                
 000003ee  TB0IV                                 
 000003d0  TB0R                                  
-00007342  TIMER0_A0_ISR                         
-0001505c  Timer_A_clear                         
-00014fee  Timer_A_disableCaptureCompareInterrupt
-00015062  Timer_A_disableInterrupt              
-00015038  Timer_A_stop                          
+00007350  TIMER0_A0_ISR                         
+000150cc  Timer_A_clear                         
+0001505e  Timer_A_disableCaptureCompareInterrupt
+000150d2  Timer_A_disableInterrupt              
+000150a8  Timer_A_stop                          
 000005d0  UCA0ABCTL                             
 000005c6  UCA0BRW                               
 000005c7  UCA0BRW_H                             
@@ -1848,40 +1849,40 @@ address   name
 0000068e  UCB1TXBUF                             
 0000068f  UCB1TXBUF_H                           
 0000068e  UCB1TXBUF_L                           
-00007406  USCI_A0_ISR                           
-000073ac  USCI_A1_ISR                           
+00007414  USCI_A0_ISR                           
+000073ba  USCI_A1_ISR                           
 0000015c  WDTCTL                                
 0000015d  WDTCTL_H                              
 0000015c  WDTCTL_L                              
-00014636  _Dclass                               
+000146a6  _Dclass                               
 00007118  _Denorm                               
-0001302e  _Dnorm                                
+00013142  _Dnorm                                
 00012566  _Dscale                               
-0001411e  _Dunscale                             
+0001418e  _Dunscale                             
 00007128  _Eps                                  
-00007230  _Errno                                
-0000721c  _Fenv                                 
-00014ad0  _Feraise                              
+0000723e  _Errno                                
+0000722a  _Fenv                                 
+00014b40  _Feraise                              
 00007138  _Hugeval                              
 00007148  _Inf                                  
 00007158  _Nan                                  
 00007178  _Rteps                                
 00007168  _Snan                                 
-00007220  _Tls_setup__Fenv                      
+0000722e  _Tls_setup__Fenv                      
 00007188  _Xbig                                 
 00007190  _Zero                                 
 00006fa0  __STACK_END                           
 00000fa0  __STACK_SIZE                          
 00001b58  __SYSMEM_SIZE                         
-00008206  __TI_CINIT_Base                       
-00008216  __TI_CINIT_Limit                      
-000081f4  __TI_Handler_Table_Base               
-00008200  __TI_Handler_Table_Limit              
+00008254  __TI_CINIT_Base                       
+00008264  __TI_CINIT_Limit                      
+00008242  __TI_Handler_Table_Base               
+0000824e  __TI_Handler_Table_Limit              
 UNDEFED   __TI_INITARRAY_Base                   
 UNDEFED   __TI_INITARRAY_Limit                  
-00007464  __TI_ISR_TRAP                         
-00014f80  __TI_decompress_none                  
-0001506e  __TI_decompress_rle24                 
+00007472  __TI_ISR_TRAP                         
+00014ff0  __TI_decompress_none                  
+000150de  __TI_decompress_rle24                 
 00011508  __TI_frcaddd                          
 00010000  __TI_frcdivd                          
 000107ec  __TI_frcmpyd                          
@@ -1914,147 +1915,147 @@ UNDEFED   __TI_INITARRAY_Limit
 0000fffa  __TI_int53                            
 0000fffc  __TI_int54                            
 00011fbe  __TI_printfi                          
-00013736  __TI_renormd                          
-00014d58  __TI_zero_init                        
-00015074  __abort_execution                     
+0001384a  __TI_renormd                          
+00014dc8  __TI_zero_init                        
+000150e4  __abort_execution                     
 ffffffff  __binit__                             
 ffffffff  __c_args__                            
 00010ad0  __mspabi_addd                         
-00013410  __mspabi_cmpd                         
+00013524  __mspabi_cmpd                         
 0001175a  __mspabi_divd                         
-00014876  __mspabi_divli                        
-00014f1a  __mspabi_divu                         
-00014532  __mspabi_divul                        
+000148e6  __mspabi_divli                        
+00014f8a  __mspabi_divu                         
+000145a2  __mspabi_divul                        
 00010452  __mspabi_divull                       
-00014cbe  __mspabi_fixdi                        
-000143a8  __mspabi_fixdli                       
-00014ffa  __mspabi_fltid                        
-00013bb8  __mspabi_fltlid                       
+00014d2e  __mspabi_fixdi                        
+00014418  __mspabi_fixdli                       
+0001506a  __mspabi_fltid                        
+00013c28  __mspabi_fltlid                       
 00010da8  __mspabi_mpyd                         
-00014f30  __mspabi_mpyi_f5hw                    
-00014e28  __mspabi_mpyl_f5hw                    
-00014c3a  __mspabi_negd                         
-00014876  __mspabi_remli                        
-00014f1a  __mspabi_remu                         
-00014532  __mspabi_remul                        
-00015024  __mspabi_slli                         
-00014fb4  __mspabi_slll                         
-0001496a  __mspabi_slll_1                       
-00014946  __mspabi_slll_10                      
-00014942  __mspabi_slll_11                      
-0001493e  __mspabi_slll_12                      
-0001493a  __mspabi_slll_13                      
-00014936  __mspabi_slll_14                      
-00014932  __mspabi_slll_15                      
-00014966  __mspabi_slll_2                       
-00014962  __mspabi_slll_3                       
-0001495e  __mspabi_slll_4                       
-0001495a  __mspabi_slll_5                       
-00014956  __mspabi_slll_6                       
-00014952  __mspabi_slll_7                       
-0001494e  __mspabi_slll_8                       
-0001494a  __mspabi_slll_9                       
-000149ea  __mspabi_sllll                        
-00014fa4  __mspabi_sral                         
-0001492c  __mspabi_sral_1                       
-00014908  __mspabi_sral_10                      
-00014904  __mspabi_sral_11                      
-00014900  __mspabi_sral_12                      
-000148fc  __mspabi_sral_13                      
-000148f8  __mspabi_sral_14                      
-000148f4  __mspabi_sral_15                      
-00014928  __mspabi_sral_2                       
-00014924  __mspabi_sral_3                       
-00014920  __mspabi_sral_4                       
-0001491c  __mspabi_sral_5                       
-00014918  __mspabi_sral_6                       
-00014914  __mspabi_sral_7                       
-00014910  __mspabi_sral_8                       
-0001490c  __mspabi_sral_9                       
-0001502e  __mspabi_srli                         
-00014fc4  __mspabi_srll                         
-000149a8  __mspabi_srll_1                       
-00014984  __mspabi_srll_10                      
-00014980  __mspabi_srll_11                      
-0001497c  __mspabi_srll_12                      
-00014978  __mspabi_srll_13                      
-00014974  __mspabi_srll_14                      
-00014970  __mspabi_srll_15                      
-000149a4  __mspabi_srll_2                       
-000149a0  __mspabi_srll_3                       
-0001499c  __mspabi_srll_4                       
-00014998  __mspabi_srll_5                       
-00014994  __mspabi_srll_6                       
-00014990  __mspabi_srll_7                       
-0001498c  __mspabi_srll_8                       
-00014988  __mspabi_srll_9                       
-00014a24  __mspabi_srlll                        
-00014ba6  __mspabi_subd                         
+00014fa0  __mspabi_mpyi_f5hw                    
+00014e98  __mspabi_mpyl_f5hw                    
+00014caa  __mspabi_negd                         
+000148e6  __mspabi_remli                        
+00014f8a  __mspabi_remu                         
+000145a2  __mspabi_remul                        
+00015094  __mspabi_slli                         
+00015024  __mspabi_slll                         
+000149da  __mspabi_slll_1                       
+000149b6  __mspabi_slll_10                      
+000149b2  __mspabi_slll_11                      
+000149ae  __mspabi_slll_12                      
+000149aa  __mspabi_slll_13                      
+000149a6  __mspabi_slll_14                      
+000149a2  __mspabi_slll_15                      
+000149d6  __mspabi_slll_2                       
+000149d2  __mspabi_slll_3                       
+000149ce  __mspabi_slll_4                       
+000149ca  __mspabi_slll_5                       
+000149c6  __mspabi_slll_6                       
+000149c2  __mspabi_slll_7                       
+000149be  __mspabi_slll_8                       
+000149ba  __mspabi_slll_9                       
+00014a5a  __mspabi_sllll                        
+00015014  __mspabi_sral                         
+0001499c  __mspabi_sral_1                       
+00014978  __mspabi_sral_10                      
+00014974  __mspabi_sral_11                      
+00014970  __mspabi_sral_12                      
+0001496c  __mspabi_sral_13                      
+00014968  __mspabi_sral_14                      
+00014964  __mspabi_sral_15                      
+00014998  __mspabi_sral_2                       
+00014994  __mspabi_sral_3                       
+00014990  __mspabi_sral_4                       
+0001498c  __mspabi_sral_5                       
+00014988  __mspabi_sral_6                       
+00014984  __mspabi_sral_7                       
+00014980  __mspabi_sral_8                       
+0001497c  __mspabi_sral_9                       
+0001509e  __mspabi_srli                         
+00015034  __mspabi_srll                         
+00014a18  __mspabi_srll_1                       
+000149f4  __mspabi_srll_10                      
+000149f0  __mspabi_srll_11                      
+000149ec  __mspabi_srll_12                      
+000149e8  __mspabi_srll_13                      
+000149e4  __mspabi_srll_14                      
+000149e0  __mspabi_srll_15                      
+00014a14  __mspabi_srll_2                       
+00014a10  __mspabi_srll_3                       
+00014a0c  __mspabi_srll_4                       
+00014a08  __mspabi_srll_5                       
+00014a04  __mspabi_srll_6                       
+00014a00  __mspabi_srll_7                       
+000149fc  __mspabi_srll_8                       
+000149f8  __mspabi_srll_9                       
+00014a94  __mspabi_srlll                        
+00014c16  __mspabi_subd                         
 00012704  __vla_alloc                           
-000135b6  __vla_dealloc                         
-0001426e  _auto_init_hold_wdt                   
-00007438  _c_int00_noargs_noexit                
-00007e66  _ctypes_                              
+000136ca  __vla_dealloc                         
+000142de  _auto_init_hold_wdt                   
+00007446  _c_int00_noargs_noexit                
+00007f7c  _ctypes_                              
 00006fa0  _ftable                               
-00007224  _lock                                 
-00015084  _nop                                  
+00007232  _lock                                 
+000150f4  _nop                                  
 0000fffe  _reset_vector                         
 00006000  _stack                                
 00004400  _sys_memory                           
-0001507c  _system_pre_init                      
-00007228  _unlock                               
-00015080  abort                                 
-0001501a  abs                                   
-0001440e  atoi                                  
+000150ec  _system_pre_init                      
+00007236  _unlock                               
+000150f0  abort                                 
+0001508a  abs                                   
+0001447e  atoi                                  
 ffffffff  binit                                 
-00014200  bsp_card_get_card_location            
-00012f2a  bsp_pin_digital_write                 
+00014270  bsp_card_get_card_location            
+0001303e  bsp_pin_digital_write                 
 0001102a  bsp_pin_set_alt_funct                 
-00013324  bsp_pin_set_mode                      
-00014d0e  bsp_pin_setup                         
-00014c68  bsp_pins_initalize                    
-000134e8  bsp_set_cal_cell_power                
-00013938  bsp_set_card_power                    
-000139dc  bsp_set_valve_power                   
-000144d2  cout_data_channel                     
-00015040  error_logger_log                      
-00014b72  feraiseexcept                         
-00014686  fprintf                               
-00014e06  fputc                                 
-000149ae  fputs                                 
+00013438  bsp_pin_set_mode                      
+00014d7e  bsp_pin_setup                         
+00014cd8  bsp_pins_initalize                    
+000135fc  bsp_set_cal_cell_power                
+00013a4c  bsp_set_card_power                    
+00012e1e  bsp_set_valve_power                   
+00014542  cout_data_channel                     
+000150b0  error_logger_log                      
+00014be2  feraiseexcept                         
+000146f6  fprintf                               
+00014e76  fputc                                 
+00014a1e  fputs                                 
 00004400  fram_ipe_end                          
 00004400  fram_ipe_start                        
 00006000  fram_rx_start                         
-00013e02  free                                  
-000147f2  frexp                                 
-00014d7c  get_time                              
-00014f46  info_logger_log                       
+00013e72  free                                  
+00014862  frexp                                 
+00014dec  get_time                              
+00014fb6  info_logger_log                       
 000071ee  initCaptureParam_A1_2                 
 000071e4  initContinuousParam_A1                
 000071fa  initContinuousParam_A2                
 000071d6  initUpParam_A0                        
-00013ce0  init_uart                             
-00013fa0  ldexp                                 
-00014c0a  logger_init                           
-00014026  ltoa                                  
-00013f18  main                                  
-0001367c  malloc                                
-00014eca  memccpy                               
-00014f5a  memcpy                                
-00014f04  memset                                
-00014834  minit                                 
-00014bd8  raise                                 
+00013d50  init_uart                             
+00014010  ldexp                                 
+00014c7a  logger_init                           
+00014096  ltoa                                  
+00013f88  main                                  
+00013790  malloc                                
+00014f3a  memccpy                               
+00014fca  memcpy                                
+00014f74  memset                                
+000148a4  minit                                 
+00014c48  raise                                 
 00012cda  realloc                               
-00014a98  signal                                
-00014470  snprintf                              
-00014ee8  strchr                                
-00014fd4  strlen                                
-00014ce6  sw_delay                              
-00014f92  toupper                               
-00015048  trace_logger_log                      
-00012e1e  util_log                              
-00014c94  util_log_init                         
-000145e0  vsnprintf                             
+00014b08  signal                                
+000144e0  snprintf                              
+00014f58  strchr                                
+00015044  strlen                                
+00014d56  sw_delay                              
+00015002  toupper                               
+000150b8  trace_logger_log                      
+00012f32  util_log                              
+00014d04  util_log_init                         
+00014650  vsnprintf                             
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -3477,24 +3478,24 @@ address   name
 000071e4  initContinuousParam_A1                
 000071ee  initCaptureParam_A1_2                 
 000071fa  initContinuousParam_A2                
-0000721c  _Fenv                                 
-00007220  _Tls_setup__Fenv                      
-00007224  _lock                                 
-00007228  _unlock                               
-00007230  _Errno                                
-00007234  TA0IV_ISR                             
-00007342  TIMER0_A0_ISR                         
-000073ac  USCI_A1_ISR                           
-00007406  USCI_A0_ISR                           
-00007438  _c_int00_noargs_noexit                
-00007452  RTC_ISR                               
-00007464  __TI_ISR_TRAP                         
-0000746a  TACCR1_ISR                            
-00007e66  _ctypes_                              
-000081f4  __TI_Handler_Table_Base               
-00008200  __TI_Handler_Table_Limit              
-00008206  __TI_CINIT_Base                       
-00008216  __TI_CINIT_Limit                      
+0000722a  _Fenv                                 
+0000722e  _Tls_setup__Fenv                      
+00007232  _lock                                 
+00007236  _unlock                               
+0000723e  _Errno                                
+00007242  TA0IV_ISR                             
+00007350  TIMER0_A0_ISR                         
+000073ba  USCI_A1_ISR                           
+00007414  USCI_A0_ISR                           
+00007446  _c_int00_noargs_noexit                
+00007460  RTC_ISR                               
+00007472  __TI_ISR_TRAP                         
+00007478  TACCR1_ISR                            
+00007f7c  _ctypes_                              
+00008242  __TI_Handler_Table_Base               
+0000824e  __TI_Handler_Table_Limit              
+00008254  __TI_CINIT_Base                       
+00008264  __TI_CINIT_Limit                      
 0000ffc6  __TI_int27                            
 0000ffc8  __TI_int28                            
 0000ffca  __TI_int29                            
@@ -3536,147 +3537,147 @@ address   name
 00012566  _Dscale                               
 00012704  __vla_alloc                           
 00012cda  realloc                               
-00012e1e  util_log                              
-00012f2a  bsp_pin_digital_write                 
-0001302e  _Dnorm                                
-00013324  bsp_pin_set_mode                      
-00013410  __mspabi_cmpd                         
-000134e8  bsp_set_cal_cell_power                
-000135b6  __vla_dealloc                         
-0001367c  malloc                                
-00013736  __TI_renormd                          
-00013938  bsp_set_card_power                    
-000139dc  bsp_set_valve_power                   
-00013b1e  EUSCI_A_UART_init                     
-00013bb8  __mspabi_fltlid                       
-00013ce0  init_uart                             
-00013e02  free                                  
-00013f18  main                                  
-00013fa0  ldexp                                 
-00014026  ltoa                                  
-0001411e  _Dunscale                             
-00014200  bsp_card_get_card_location            
-0001426e  _auto_init_hold_wdt                   
-00014342  CS_initClockSignal                    
-000143a8  __mspabi_fixdli                       
-0001440e  atoi                                  
-00014470  snprintf                              
-000144d2  cout_data_channel                     
-00014532  __mspabi_divul                        
-00014532  __mspabi_remul                        
-0001458a  EUSCI_B_SPI_initMaster                
-000145e0  vsnprintf                             
-00014636  _Dclass                               
-00014686  fprintf                               
-000147f2  frexp                                 
-00014834  minit                                 
-00014876  __mspabi_divli                        
-00014876  __mspabi_remli                        
-000148f4  __mspabi_sral_15                      
-000148f8  __mspabi_sral_14                      
-000148fc  __mspabi_sral_13                      
-00014900  __mspabi_sral_12                      
-00014904  __mspabi_sral_11                      
-00014908  __mspabi_sral_10                      
-0001490c  __mspabi_sral_9                       
-00014910  __mspabi_sral_8                       
-00014914  __mspabi_sral_7                       
-00014918  __mspabi_sral_6                       
-0001491c  __mspabi_sral_5                       
-00014920  __mspabi_sral_4                       
-00014924  __mspabi_sral_3                       
-00014928  __mspabi_sral_2                       
-0001492c  __mspabi_sral_1                       
-00014932  __mspabi_slll_15                      
-00014936  __mspabi_slll_14                      
-0001493a  __mspabi_slll_13                      
-0001493e  __mspabi_slll_12                      
-00014942  __mspabi_slll_11                      
-00014946  __mspabi_slll_10                      
-0001494a  __mspabi_slll_9                       
-0001494e  __mspabi_slll_8                       
-00014952  __mspabi_slll_7                       
-00014956  __mspabi_slll_6                       
-0001495a  __mspabi_slll_5                       
-0001495e  __mspabi_slll_4                       
-00014962  __mspabi_slll_3                       
-00014966  __mspabi_slll_2                       
-0001496a  __mspabi_slll_1                       
-00014970  __mspabi_srll_15                      
-00014974  __mspabi_srll_14                      
-00014978  __mspabi_srll_13                      
-0001497c  __mspabi_srll_12                      
-00014980  __mspabi_srll_11                      
-00014984  __mspabi_srll_10                      
-00014988  __mspabi_srll_9                       
-0001498c  __mspabi_srll_8                       
-00014990  __mspabi_srll_7                       
-00014994  __mspabi_srll_6                       
-00014998  __mspabi_srll_5                       
-0001499c  __mspabi_srll_4                       
-000149a0  __mspabi_srll_3                       
-000149a4  __mspabi_srll_2                       
-000149a8  __mspabi_srll_1                       
-000149ae  fputs                                 
-000149ea  __mspabi_sllll                        
-00014a24  __mspabi_srlll                        
-00014a98  signal                                
-00014ad0  _Feraise                              
-00014b72  feraiseexcept                         
-00014ba6  __mspabi_subd                         
-00014bd8  raise                                 
-00014c0a  logger_init                           
-00014c3a  __mspabi_negd                         
-00014c68  bsp_pins_initalize                    
-00014c94  util_log_init                         
-00014cbe  __mspabi_fixdi                        
-00014ce6  sw_delay                              
-00014d0e  bsp_pin_setup                         
-00014d34  Init_Clock                            
-00014d58  __TI_zero_init                        
-00014d7c  get_time                              
-00014da0  EUSCI_A_UART_disableInterrupt         
-00014dc2  EUSCI_A_UART_enableInterrupt          
-00014de4  EUSCI_A_UART_transmitData             
-00014e06  fputc                                 
-00014e28  __mspabi_mpyl_f5hw                    
-00014e4a  EUSCI_A_UART_receiveData              
-00014eca  memccpy                               
-00014ee8  strchr                                
-00014f04  memset                                
-00014f1a  __mspabi_divu                         
-00014f1a  __mspabi_remu                         
-00014f30  __mspabi_mpyi_f5hw                    
-00014f46  info_logger_log                       
-00014f5a  memcpy                                
-00014f6e  CS_setDCOFreq                         
-00014f80  __TI_decompress_none                  
-00014f92  toupper                               
-00014fa4  __mspabi_sral                         
-00014fb4  __mspabi_slll                         
-00014fc4  __mspabi_srll                         
-00014fd4  strlen                                
-00014fe2  EUSCI_B_SPI_transmitData              
-00014fee  Timer_A_disableCaptureCompareInterrupt
-00014ffa  __mspabi_fltid                        
-00015006  EUSCI_A_UART_getInterruptStatus       
-00015010  EUSCI_B_SPI_isBusy                    
-0001501a  abs                                   
-00015024  __mspabi_slli                         
-0001502e  __mspabi_srli                         
-00015038  Timer_A_stop                          
-00015040  error_logger_log                      
-00015048  trace_logger_log                      
-00015050  EUSCI_A_UART_enable                   
-00015056  EUSCI_B_SPI_enable                    
-0001505c  Timer_A_clear                         
-00015062  Timer_A_disableInterrupt              
-0001506e  __TI_decompress_rle24                 
-00015074  __abort_execution                     
-0001507c  _system_pre_init                      
-00015080  C$$EXIT                               
-00015080  abort                                 
-00015084  _nop                                  
+00012e1e  bsp_set_valve_power                   
+00012f32  util_log                              
+0001303e  bsp_pin_digital_write                 
+00013142  _Dnorm                                
+00013438  bsp_pin_set_mode                      
+00013524  __mspabi_cmpd                         
+000135fc  bsp_set_cal_cell_power                
+000136ca  __vla_dealloc                         
+00013790  malloc                                
+0001384a  __TI_renormd                          
+00013a4c  bsp_set_card_power                    
+00013b8e  EUSCI_A_UART_init                     
+00013c28  __mspabi_fltlid                       
+00013d50  init_uart                             
+00013e72  free                                  
+00013f88  main                                  
+00014010  ldexp                                 
+00014096  ltoa                                  
+0001418e  _Dunscale                             
+00014270  bsp_card_get_card_location            
+000142de  _auto_init_hold_wdt                   
+000143b2  CS_initClockSignal                    
+00014418  __mspabi_fixdli                       
+0001447e  atoi                                  
+000144e0  snprintf                              
+00014542  cout_data_channel                     
+000145a2  __mspabi_divul                        
+000145a2  __mspabi_remul                        
+000145fa  EUSCI_B_SPI_initMaster                
+00014650  vsnprintf                             
+000146a6  _Dclass                               
+000146f6  fprintf                               
+00014862  frexp                                 
+000148a4  minit                                 
+000148e6  __mspabi_divli                        
+000148e6  __mspabi_remli                        
+00014964  __mspabi_sral_15                      
+00014968  __mspabi_sral_14                      
+0001496c  __mspabi_sral_13                      
+00014970  __mspabi_sral_12                      
+00014974  __mspabi_sral_11                      
+00014978  __mspabi_sral_10                      
+0001497c  __mspabi_sral_9                       
+00014980  __mspabi_sral_8                       
+00014984  __mspabi_sral_7                       
+00014988  __mspabi_sral_6                       
+0001498c  __mspabi_sral_5                       
+00014990  __mspabi_sral_4                       
+00014994  __mspabi_sral_3                       
+00014998  __mspabi_sral_2                       
+0001499c  __mspabi_sral_1                       
+000149a2  __mspabi_slll_15                      
+000149a6  __mspabi_slll_14                      
+000149aa  __mspabi_slll_13                      
+000149ae  __mspabi_slll_12                      
+000149b2  __mspabi_slll_11                      
+000149b6  __mspabi_slll_10                      
+000149ba  __mspabi_slll_9                       
+000149be  __mspabi_slll_8                       
+000149c2  __mspabi_slll_7                       
+000149c6  __mspabi_slll_6                       
+000149ca  __mspabi_slll_5                       
+000149ce  __mspabi_slll_4                       
+000149d2  __mspabi_slll_3                       
+000149d6  __mspabi_slll_2                       
+000149da  __mspabi_slll_1                       
+000149e0  __mspabi_srll_15                      
+000149e4  __mspabi_srll_14                      
+000149e8  __mspabi_srll_13                      
+000149ec  __mspabi_srll_12                      
+000149f0  __mspabi_srll_11                      
+000149f4  __mspabi_srll_10                      
+000149f8  __mspabi_srll_9                       
+000149fc  __mspabi_srll_8                       
+00014a00  __mspabi_srll_7                       
+00014a04  __mspabi_srll_6                       
+00014a08  __mspabi_srll_5                       
+00014a0c  __mspabi_srll_4                       
+00014a10  __mspabi_srll_3                       
+00014a14  __mspabi_srll_2                       
+00014a18  __mspabi_srll_1                       
+00014a1e  fputs                                 
+00014a5a  __mspabi_sllll                        
+00014a94  __mspabi_srlll                        
+00014b08  signal                                
+00014b40  _Feraise                              
+00014be2  feraiseexcept                         
+00014c16  __mspabi_subd                         
+00014c48  raise                                 
+00014c7a  logger_init                           
+00014caa  __mspabi_negd                         
+00014cd8  bsp_pins_initalize                    
+00014d04  util_log_init                         
+00014d2e  __mspabi_fixdi                        
+00014d56  sw_delay                              
+00014d7e  bsp_pin_setup                         
+00014da4  Init_Clock                            
+00014dc8  __TI_zero_init                        
+00014dec  get_time                              
+00014e10  EUSCI_A_UART_disableInterrupt         
+00014e32  EUSCI_A_UART_enableInterrupt          
+00014e54  EUSCI_A_UART_transmitData             
+00014e76  fputc                                 
+00014e98  __mspabi_mpyl_f5hw                    
+00014eba  EUSCI_A_UART_receiveData              
+00014f3a  memccpy                               
+00014f58  strchr                                
+00014f74  memset                                
+00014f8a  __mspabi_divu                         
+00014f8a  __mspabi_remu                         
+00014fa0  __mspabi_mpyi_f5hw                    
+00014fb6  info_logger_log                       
+00014fca  memcpy                                
+00014fde  CS_setDCOFreq                         
+00014ff0  __TI_decompress_none                  
+00015002  toupper                               
+00015014  __mspabi_sral                         
+00015024  __mspabi_slll                         
+00015034  __mspabi_srll                         
+00015044  strlen                                
+00015052  EUSCI_B_SPI_transmitData              
+0001505e  Timer_A_disableCaptureCompareInterrupt
+0001506a  __mspabi_fltid                        
+00015076  EUSCI_A_UART_getInterruptStatus       
+00015080  EUSCI_B_SPI_isBusy                    
+0001508a  abs                                   
+00015094  __mspabi_slli                         
+0001509e  __mspabi_srli                         
+000150a8  Timer_A_stop                          
+000150b0  error_logger_log                      
+000150b8  trace_logger_log                      
+000150c0  EUSCI_A_UART_enable                   
+000150c6  EUSCI_B_SPI_enable                    
+000150cc  Timer_A_clear                         
+000150d2  Timer_A_disableInterrupt              
+000150de  __TI_decompress_rle24                 
+000150e4  __abort_execution                     
+000150ec  _system_pre_init                      
+000150f0  C$$EXIT                               
+000150f0  abort                                 
+000150f4  _nop                                  
 ffffffff  __binit__                             
 ffffffff  __c_args__                            
 ffffffff  binit                                 

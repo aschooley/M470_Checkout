@@ -19,6 +19,7 @@
 #include <driverlib.h>
 // Third-party library header files
 // Standard library header files
+#include <stdbool.h>
 
 // *****************************************************************************
 // Private macro definitions
@@ -27,36 +28,6 @@
 // *****************************************************************************
 // Private data type definitions (enum, struct, typedef, union)
 // *****************************************************************************
-
-typedef enum
-{
-    VALVE_CARD_1 = 0,
-    VALVE_CARD_2,
-    VALVE_CARD_3,
-    VALVE_CARD_4,
-    VALVE_CARD_5,
-    VALVE_CARD_6,
-    VALVE_CARD_7,
-    VALVE_CARD_8,
-    VALVE_CARD_9,
-    VALVE_CARD_10,
-    VALVE_CARD_11,
-    VALVE_CARD_12,
-    VALVE_CARD_13,
-    VALVE_CARD_14,
-    VALVE_CARD_15,
-    VALVE_CARD_16,
-    VALVE_CARD_17,
-    VALVE_CARD_18,
-    VALVE_MEDIA_1,
-    VALVE_MEDIA_2,
-    VALVE_PUMP_1,
-    VALVE_PUMP_2,
-    VALVE_AB_1,
-    VALVE_AB_2,
-    VALVE_COUNT
-} valve_t;
-
 
 // *****************************************************************************
 // Private static constant definitions
@@ -94,39 +65,95 @@ static inline uint16_t create_bitmask(uint8_t value)
 // Public function bodies
 // *****************************************************************************
 
-void bsp_set_valve_power(card_t card, power_state_t state)
+bool bsp_set_valve_power(card_t card, power_state_t state)
 {
+    // Initalize the static varible to an out of bounds value.
+    static card_t card_in_use = CARD_COUNT;
+    // Initalize success to false.
+    bool success = false;
 
-    card_manifold_address_t card_address    = bsp_card_get_card_location(card);
-    uint16_t                address_bitmask = create_bitmask(card_address.index);
-    uint16_t latch_state = 0;
-    modify_bitfield(&latch_state, address_bitmask, state);
+    // Arguably the below conditinos could be put into only a success = true
+    // if statent and let the initization condition of false fall through.
+    // I chose to enumerate all conditions to help identify any possible
+    // logic error on my part.
 
-    if (CARD_BANK_1 == card_address.bank)
+    // If no card is active you can turn one on.
+    if (CARD_COUNT == card_in_use && ON == state)
     {
-        bsp_pin_digital_write(&pins.fluidics_en_latch_mani_1, DISABLED);
-        send_address(latch_state);
-        bsp_pin_digital_write(&pins.fluidics_en_latch_mani_1, ENABLED);
+        success = true;
     }
-    else if (CARD_BANK_2 == card_address.bank)
+    // If a card is active you can not turn one on.
+    else if (CARD_COUNT != card_in_use && ON == state)
     {
-        bsp_pin_digital_write(&pins.fluidics_en_latch_mani_2, DISABLED);
-        send_address(latch_state);
-        bsp_pin_digital_write(&pins.fluidics_en_latch_mani_2, ENABLED);
+        success = false;
     }
+    // If a card is active you can only turn that one off.
+    else if (card == card_in_use && OFF == state)
+    {
+        success = true;
+    }
+    // You can not turn off any card but the on that is on.
+    else if (card != card_in_use && OFF == state)
+    {
+        success = false;
+    }
+    // If we got here something went wrong, above cases should have handled it.
     else
     {
-        logf(ERROR, "Invalid card bank. Bank = %d", card_address.bank);
+        log(ERROR, "valve power logic condition not accounted for, pgm error!");
     }
+
+    // only do stuff if we in one of the two possible go conditions are met.
+    if (success)
+    {
+        card_manifold_address_t card_address = bsp_card_get_card_location(
+            card);
+        uint16_t address_bitmask = create_bitmask(
+            card_address.index);
+        uint16_t latch_state = 0;
+        modify_bitfield(&latch_state, address_bitmask, state);
+
+        if (CARD_BANK_1 == card_address.bank)
+        {
+            bsp_pin_digital_write(&pins.fluidics_en_latch_mani_1, DISABLED);
+            send_address(latch_state);
+            bsp_pin_digital_write(&pins.fluidics_en_latch_mani_1, ENABLED);
+        }
+        else if (CARD_BANK_2 == card_address.bank)
+        {
+            bsp_pin_digital_write(&pins.fluidics_en_latch_mani_2, DISABLED);
+            send_address(latch_state);
+            bsp_pin_digital_write(&pins.fluidics_en_latch_mani_2, ENABLED);
+        }
+        else
+        {
+            success = false;
+            logf(ERROR, "Invalid card bank. Bank = %d", card_address.bank);
+        }
+    }
+
+    // if the above operations succeded, update our state.
+    if (success)
+    {
+        if (ON == state)
+        {
+            card_in_use = card;
+        }
+        else
+        {
+            card_in_use = CARD_COUNT;
+        }
+    }
+    return success;
 }
 
 
-void bsp_set_card_power(card_t card, power_state_t state)
+bool bsp_set_card_power(card_t card, power_state_t state)
 {
 
     card_manifold_address_t card_address    = bsp_card_get_card_location(card);
     uint16_t                address_bitmask = create_bitmask(card_address.index);
-    uint16_t latch_state = 0;
+    uint16_t                latch_state     = 0;
     modify_bitfield(&latch_state, address_bitmask, state);
 
     if (CARD_BANK_1 == card_address.bank)
@@ -148,13 +175,13 @@ void bsp_set_card_power(card_t card, power_state_t state)
 
 }
 
-void bsp_set_cal_cell_power(card_t card, cal_cell_t cal_cell_type,
+bool bsp_set_cal_cell_power(card_t card, cal_cell_t cal_cell_type,
                             power_state_t state)
 {
     // All we need is the bank.
     card_manifold_address_t card_address = bsp_card_get_card_location(card);
     uint16_t                address_bitmask;
-    uint16_t latch_state = 0;
+    uint16_t                latch_state = 0;
 
     if (CAL_CELL_MANIFOLD == cal_cell_type || CAL_CELL_BAG == cal_cell_type)
     {
@@ -186,7 +213,7 @@ void bsp_set_cal_cell_power(card_t card, cal_cell_t cal_cell_type,
 }
 
 
-void bsp_set_fluidics_power(card_t card, fluidics_t fluidics_object,
+bool bsp_set_fluidics_power(card_t card, fluidics_t fluidics_object,
                             power_state_t state)
 {
 
@@ -240,7 +267,7 @@ void bsp_set_fluidics_power(card_t card, fluidics_t fluidics_object,
     bsp_pin_digital_write(pin, ENABLED);
 }
 
-void bsp_set_heater_power(thermal_zone_t zone, power_state_t state)
+bool bsp_set_heater_power(thermal_zone_t zone, power_state_t state)
 {
 
     card_manifold_address_t zone_address = bsp_card_get_thermal_location(zone);
@@ -323,8 +350,8 @@ static void send_address(uint16_t addr)
         8000000,
         1000000,
         EUSCI_B_SPI_MSB_FIRST,
-		EUSCI_B_SPI_PHASE_DATA_CHANGED_ONFIRST_CAPTURED_ON_NEXT,
-		EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_HIGH,
+        EUSCI_B_SPI_PHASE_DATA_CHANGED_ONFIRST_CAPTURED_ON_NEXT,
+        EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_HIGH,
         EUSCI_B_SPI_3PIN
     };
     // Initalize and enable the SPI port.
@@ -348,10 +375,10 @@ static void send_address(uint16_t addr)
     EUSCI_B_SPI_transmitData(EUSCI_B0_BASE, LSB);
 
     // Wait for the SPI port to be available.
-     while (EUSCI_B_SPI_isBusy(EUSCI_B0_BASE))
-     {
-         ;
-     }
+    while (EUSCI_B_SPI_isBusy(EUSCI_B0_BASE))
+    {
+        ;
+    }
 }
 
 static void modify_bitfield (uint16_t * bitfield, uint16_t bitmask,
