@@ -98,7 +98,7 @@ void Init_Clock()
     //CS_initClockSignal(CS_SMCLK, CS_HFXTCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
     // Intializes the XT1 crystal oscillator
-     CS_turnOnLFXT(CS_LFXT_DRIVE_3);
+    // CS_turnOnLFXT(CS_LFXT_DRIVE_3);
 }
 
 // *****************************************************************************
