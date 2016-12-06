@@ -421,9 +421,9 @@ int main(void)
     	card_t card = CARD_1;
     	for (;card < CARD_10;card++)
     	{
-    		bsp_set_valve(card,ENABLED);
+    		bsp_set_valve_power(card,ON);
     		sw_delay(1000);
-    		bsp_set_valve(card,DISABLED);
+    		bsp_set_valve_power(card,OFF);
     	}
 
     }
