@@ -6,8 +6,11 @@
 ../ow_lnk.c
 ../bsp_uart.c
 ../drv_ow.c
+../bsp_card.c
 ../main.c
+../bsp_latches.c
 ../drv_ds3234.c
+../bsp_card.h
 ../main.h
 ../drv_ds3234.h
 ../taos_mode.h
@@ -17,4 +20,5 @@
 ../drv_logger.h
 ../drv_ow.h
 ../bsp_pins_types.h
+../bsp_latches.h
 ../bsp_pins.h

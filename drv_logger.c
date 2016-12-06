@@ -86,9 +86,9 @@ void logger_init(void)
 
 void get_time(char * const buffer, const uint8_t buff_sz)
 {
-	static uint32_t msg_number = 0;
-	snprintf(buffer, buff_sz, "%d",
-			msg_number);
+    static uint32_t msg_number = 0;
+    snprintf(buffer, buff_sz, "%d",
+             msg_number);
 
 }
 void error_logger_log (const char * msg)

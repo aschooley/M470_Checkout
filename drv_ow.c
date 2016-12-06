@@ -103,7 +103,7 @@ static void drv_ow_init(void)
 
     for (i = 0; i < g.count; i++)
     {
- //       bsp_pin_digital_write(&pins.uart_1w_sd_sel, HIGH);
+        //       bsp_pin_digital_write(&pins.uart_1w_sd_sel, HIGH);
 
         readNV(0, 0, g.device_sn[i], 0, 0, &g.device_contents[i], 1);
 
@@ -122,7 +122,7 @@ static void drv_ow_init(void)
 
         g.device_contents[i][record_sz] = 0;                 //null terminate it
 
-     //   bsp_pin_digital_write(&pins.uart_1w_sd_sel, LOW);
+        //   bsp_pin_digital_write(&pins.uart_1w_sd_sel, LOW);
 
     }
 }
@@ -177,7 +177,7 @@ void report_1_wire_devices(void)
     }
     logf(TRACE, "M906 SN: %02d", g.M906_dev_num);
 
-   // bsp_pin_digital_write(&pins.uart_1w_sd_sel, LOW);
+    // bsp_pin_digital_write(&pins.uart_1w_sd_sel, LOW);
 }
 
 

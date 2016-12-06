@@ -32,31 +32,25 @@ extern "C" {
 
 typedef enum
 {
-	HEATER_OFF = 0,
-	HEATER_ON
-} heater_state_t;
-
-typedef enum
-{
-	OFF = 0,
-	ON
+    OFF = 0,
+    ON
 } power_state_t;
 
 // these arranged in the oder that they arranged in the shift register
 typedef enum
 {
-	FLUIDICS_VALVE_PUMP_SAFETY,
-	FLUIDICS_VALVE_MEDIA,
-	FLUIDICS_VALVE_AB,
-	FLUIDICS_PUMP,
-	FLUIDICS_COUNT
+    FLUIDICS_VALVE_PUMP_SAFETY,
+    FLUIDICS_VALVE_MEDIA,
+    FLUIDICS_VALVE_AB,
+    FLUIDICS_PUMP,
+    FLUIDICS_COUNT
 } fluidics_t;
 
 // these arranged in the oder that they arranged in the shift register
 typedef enum
 {
-	CAL_CELL_MANIFOLD = 9,
-	CAL_CELL_BAG
+    CAL_CELL_MANIFOLD = 9,
+    CAL_CELL_BAG
 } cal_cell_t;
 
 // *****************************************************************************
@@ -67,15 +61,17 @@ typedef enum
 // Public function prototypes
 // *****************************************************************************
 
-void bsp_set_valve_power(card_t card, power_state_t state);
+void bsp_set_valve_power (card_t card, power_state_t state);
 
-void bsp_set_card_power(card_t card, power_state_t state);
+void bsp_set_card_power (card_t card, power_state_t state);
 
-void bsp_set_cal_cell_power(card_t card,cal_cell_t cal_cell_type, power_state_t state);
+void bsp_set_cal_cell_power (card_t card, cal_cell_t cal_cell_type,
+                             power_state_t state);
 
-void bsp_set_fluidics_power(card_t card,fluidics_t fluidics_object,power_state_t state);
+void bsp_set_fluidics_power (card_t card, fluidics_t fluidics_object,
+                             power_state_t state);
 
-void bsp_set_heater_power(thermal_zone_t zone, power_state_t state);
+void bsp_set_heater_power (thermal_zone_t zone, power_state_t state);
 
 // *****************************************************************************
 // Public inline function definitions
@@ -86,4 +82,3 @@ void bsp_set_heater_power(thermal_zone_t zone, power_state_t state);
 #endif
 
 #endif // BSP_LATCHES_H
-

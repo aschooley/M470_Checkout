@@ -81,12 +81,12 @@ void Init_Clock()
 {
     // Set P4.1 and P4.2 as Secondary Module Function Input, LFXT.
     /* no lfx
-	GPIO_setAsPeripheralModuleFunctionInputPin(
+        GPIO_setAsPeripheralModuleFunctionInputPin(
         GPIO_PORT_PJ,
         GPIO_PIN4 + GPIO_PIN5,
         GPIO_PRIMARY_MODULE_FUNCTION
         );
-    */
+     */
 
     // Set DCO frequency to default 8MHz
     CS_setDCOFreq(CS_DCORSEL_0, CS_DCOFSEL_6);
@@ -107,8 +107,8 @@ void Init_Clock()
 
 
 /*
-void check_for_trace_msg(void)
-{
+   void check_for_trace_msg(void)
+   {
     // Check if a msg was recieved on the trace port.
     uint8_t got_msg = trace_msg_recieved();
 
@@ -133,8 +133,8 @@ void check_for_trace_msg(void)
             drv_rtc_set_time_date(&set_time);
         }
     }
-}
-*/
+   }
+ */
 void sw_delay(uint32_t num)
 {
     for (; num > 0; num--)
@@ -152,16 +152,16 @@ void sw_delay(uint32_t num)
 }
 
 /*
-void openlogger_start(void)
-{
+   void openlogger_start(void)
+   {
     bsp_pin_digital_write(&pins.uart_1w_sd_sel, LOW);
     bsp_pin_digital_write(&pins.sd_pwr_en, ENABLED);
     bsp_pin_digital_write(&pins.logger_rst, DISABLED);
-}
-*/
+   }
+ */
 /*
-void openlogger_stop(void)
-{
+   void openlogger_stop(void)
+   {
     // will close out the current file
     openlogger_got_to_cmd_mode();
     sw_delay(10);
@@ -169,11 +169,11 @@ void openlogger_stop(void)
     bsp_pin_digital_write(&pins.logger_rst, ENABLED);
     bsp_pin_digital_write(&pins.sd_pwr_en, DISABLED);
     bsp_pin_digital_write(&pins.uart_1w_sd_sel, HIGH);
-}
-*/
+   }
+ */
 /*
-openlogger_status_t openlogger_get_startup_msg(void)
-{
+   openlogger_status_t openlogger_get_startup_msg(void)
+   {
     const uint8_t rx_buff_sz = 40;
     char          rx_buff[rx_buff_sz];
     read_data_msg(rx_buff, rx_buff_sz);
@@ -218,11 +218,11 @@ openlogger_status_t openlogger_get_startup_msg(void)
         log(TRACE, "Logger in command mode.");
     }
     return (retval);
-}
-*/
+   }
+ */
 /*
-bool openlogger_md(char * const folder)
-{
+   bool openlogger_md(char * const folder)
+   {
 
     bool          retval     = true;
     const uint8_t command_sz = 14;
@@ -253,11 +253,11 @@ bool openlogger_md(char * const folder)
     }
     return (retval);
 
-}
-*/
+   }
+ */
 /*
-bool openlogger_cd(char * const folder)
-{
+   bool openlogger_cd(char * const folder)
+   {
     bool          retval     = true;
     const uint8_t command_sz = 14;
     char          command[command_sz];
@@ -287,11 +287,11 @@ bool openlogger_cd(char * const folder)
     }
     return (retval);
 
-}
-*/
+   }
+ */
 /*
-bool openlogger_append(char * const file, char * const extension)
-{
+   bool openlogger_append(char * const file, char * const extension)
+   {
     bool          retval     = true;
     const uint8_t command_sz = 21;
     char          command[command_sz];
@@ -321,18 +321,18 @@ bool openlogger_append(char * const file, char * const extension)
     }
     return (retval);
 
-}
-*/
+   }
+ */
 /*
-void write_meta_data_file(rtc_t current_time)
-{
+   void write_meta_data_file(rtc_t current_time)
+   {
     const uint8_t comm_buff_sz = 130;
     char          comm_buff[comm_buff_sz];
     const uint8_t rx_buff_sz = 40;
     char          rx_buff[rx_buff_sz];
 
 
-// print creation date
+   // print creation date
     snprintf(
         comm_buff, comm_buff_sz,
         "File Created y:m:d h:m:s UTC 20%02d:%02d:%02d %02d:%02d:%02d\r\n",
@@ -341,7 +341,7 @@ void write_meta_data_file(rtc_t current_time)
         current_time.minute,
         current_time.second);
     cout_data_channel(comm_buff);
-// print number of devices
+   // print number of devices
     snprintf(comm_buff, comm_buff_sz,
              "Found %d connected devices.\r\n",
              drv_ow_get_dev_cnt());
@@ -349,7 +349,7 @@ void write_meta_data_file(rtc_t current_time)
 
     uint8_t i;
 
-// print device info
+   // print device info
     for (i = 0; i < drv_ow_get_dev_cnt(); i++)
     {
         // 8 bytes yields 16 hex digits, plus a NULL terminator
@@ -368,11 +368,11 @@ void write_meta_data_file(rtc_t current_time)
         cout_data_channel(comm_buff);
 
     }
-}
-*/
+   }
+ */
 /*
-bool openlogger_got_to_cmd_mode(void)
-{
+   bool openlogger_got_to_cmd_mode(void)
+   {
     bool          retval     = true;
     const uint8_t command_sz = 4;
     char          command[command_sz];
@@ -401,8 +401,8 @@ bool openlogger_got_to_cmd_mode(void)
         log(TRACE, "Now in command mode.");
     }
     return (retval);
-}
-*/
+   }
+ */
 
 int main(void)
 {
@@ -416,155 +416,156 @@ int main(void)
     logger_init();
     bsp_pins_initalize();
 
-    for(;;)
-    {
-    	card_t card = CARD_1;
-    	for (;card < CARD_10;card++)
-    	{
-    		bsp_set_valve_power(card,ON);
-    		sw_delay(1000);
-    		bsp_set_valve_power(card,OFF);
-    	}
-
-    }
-
-  /*  drv_rtc_init();
-
-    bsp_pin_digital_write(&pins.led_power_en, ENABLED);
-
     for (;;)
     {
-        static uint8_t running = 2;
+        card_t card = CARD_1;
 
-        if (pins.power_down.enabled_state ==
-            bsp_pin_digital_read(&pins.power_down))
+        for (; card < CARD_10; card++)
         {
-            if (0 != running)
-            {
-                do_stuff_shutdown();
-
-                openlogger_stop();
-                // Indicate that we are all shut down now.
-                running = 0;
-                // Turn off all lights but #4
-                bsp_pin_digital_write(&pins.led_1, DISABLED);
-                bsp_pin_digital_write(&pins.led_2, DISABLED);
-                bsp_pin_digital_write(&pins.led_3, DISABLED);
-                bsp_pin_digital_write(&pins.led_4, ENABLED);
-            }
+            bsp_set_valve_power(card, ON);
+            sw_delay(1000);
+            bsp_set_valve_power(card, OFF);
         }
-        else
-        {
-            if (1 != running)
-            {
-                report_1_wire_devices();
 
-                openlogger_start();
-
-                bsp_pin_digital_write(&pins.led_1, ENABLED);
-                bsp_pin_digital_write(&pins.led_2, DISABLED);
-                bsp_pin_digital_write(&pins.led_3, DISABLED);
-                bsp_pin_digital_write(&pins.led_4, DISABLED);
-
-                sw_delay(10);
-
-                openlogger_status_t startup_mode = openlogger_get_startup_msg();
-
-                if (startup_mode == SD_NOT_INIT)
-                {
-                    // turn on the third led to indicate a problem.
-                    bsp_pin_digital_write(&pins.led_3, ENABLED);
-                }
-
-                if (startup_mode == IN_CMD_MODE)
-                {
-
-
-                    //bsp_pin_digital_write(&pins.led_2, ENABLED);
-
-
-                    rtc_t         current_time = drv_rtc_read_time_date();
-                    const uint8_t name_sz      = 9;
-                    char          folder_name[name_sz];
-                    char          file_name[name_sz];
-                    snprintf(folder_name, name_sz, "20%02d%02d%02d",
-                             current_time.year, current_time.month,
-                             current_time.day);
-                    //make sure that the sn is only 2 digits  if it is more then the file won't get made.
-                    uint8_t m906_sn = drv_ow_get_m906_sn();
-                    m906_sn = (m906_sn > 99) ? 99 : m906_sn;
-                    snprintf(file_name, name_sz, "%02d%02d%02d%02d",
-                             m906_sn, current_time.hour, current_time.minute,
-                             current_time.second);
-
-                    bool success = true;
-
-
-                    success = openlogger_cd(folder_name);
-
-                    if (!success)
-                    {
-                        success = openlogger_md(folder_name);
-
-                        success = openlogger_cd(folder_name);
-                    }
-
-                    if (success)
-                    {
-                        success = openlogger_append(file_name, ".txt");
-                    }
-
-                    if (success)
-                    {
-                        write_meta_data_file( current_time);
-                    }
-
-                    if (success)
-                    {
-                        success = openlogger_got_to_cmd_mode();
-                    }
-
-                    if (success)
-                    {
-                        success = openlogger_append(file_name, ".csv");
-
-                        do_stuff_init();
-                    }
-
-                    if (success)
-                    {
-                        // Turn on led 2 to inicate that everything is okay.
-                        bsp_pin_digital_write(&pins.led_2, ENABLED);
-                    }
-                    else // Turn on the third led to indicate a problem.
-                    {
-                        bsp_pin_digital_write(&pins.led_3, ENABLED);
-                        log(ERROR, "File system could not initalize")
-                    }
-                }
-                running = 1;
-            }
-
-            if (1 == running)
-            {
-                const uint8_t comm_buff_sz = 130;
-                char          comm_buff[comm_buff_sz];
-
-                do_stuff();
-
-
-                // Blink to konw we are running
-                bsp_pin_digital_toggle(&pins.led_1);
-
-                // Check if any messages came in on the trace port.
-                check_for_trace_msg();
-
-                sw_delay(3);
-            }
-
-        }
     }
-*/
+
+    /*  drv_rtc_init();
+
+       bsp_pin_digital_write(&pins.led_power_en, ENABLED);
+
+       for (;;)
+       {
+          static uint8_t running = 2;
+
+          if (pins.power_down.enabled_state ==
+              bsp_pin_digital_read(&pins.power_down))
+          {
+              if (0 != running)
+              {
+                  do_stuff_shutdown();
+
+                  openlogger_stop();
+                  // Indicate that we are all shut down now.
+                  running = 0;
+                  // Turn off all lights but #4
+                  bsp_pin_digital_write(&pins.led_1, DISABLED);
+                  bsp_pin_digital_write(&pins.led_2, DISABLED);
+                  bsp_pin_digital_write(&pins.led_3, DISABLED);
+                  bsp_pin_digital_write(&pins.led_4, ENABLED);
+              }
+          }
+          else
+          {
+              if (1 != running)
+              {
+                  report_1_wire_devices();
+
+                  openlogger_start();
+
+                  bsp_pin_digital_write(&pins.led_1, ENABLED);
+                  bsp_pin_digital_write(&pins.led_2, DISABLED);
+                  bsp_pin_digital_write(&pins.led_3, DISABLED);
+                  bsp_pin_digital_write(&pins.led_4, DISABLED);
+
+                  sw_delay(10);
+
+                  openlogger_status_t startup_mode = openlogger_get_startup_msg();
+
+                  if (startup_mode == SD_NOT_INIT)
+                  {
+                      // turn on the third led to indicate a problem.
+                      bsp_pin_digital_write(&pins.led_3, ENABLED);
+                  }
+
+                  if (startup_mode == IN_CMD_MODE)
+                  {
+
+
+                      //bsp_pin_digital_write(&pins.led_2, ENABLED);
+
+
+                      rtc_t         current_time = drv_rtc_read_time_date();
+                      const uint8_t name_sz      = 9;
+                      char          folder_name[name_sz];
+                      char          file_name[name_sz];
+                      snprintf(folder_name, name_sz, "20%02d%02d%02d",
+                               current_time.year, current_time.month,
+                               current_time.day);
+                      //make sure that the sn is only 2 digits  if it is more then the file won't get made.
+                      uint8_t m906_sn = drv_ow_get_m906_sn();
+                      m906_sn = (m906_sn > 99) ? 99 : m906_sn;
+                      snprintf(file_name, name_sz, "%02d%02d%02d%02d",
+                               m906_sn, current_time.hour, current_time.minute,
+                               current_time.second);
+
+                      bool success = true;
+
+
+                      success = openlogger_cd(folder_name);
+
+                      if (!success)
+                      {
+                          success = openlogger_md(folder_name);
+
+                          success = openlogger_cd(folder_name);
+                      }
+
+                      if (success)
+                      {
+                          success = openlogger_append(file_name, ".txt");
+                      }
+
+                      if (success)
+                      {
+                          write_meta_data_file( current_time);
+                      }
+
+                      if (success)
+                      {
+                          success = openlogger_got_to_cmd_mode();
+                      }
+
+                      if (success)
+                      {
+                          success = openlogger_append(file_name, ".csv");
+
+                          do_stuff_init();
+                      }
+
+                      if (success)
+                      {
+                          // Turn on led 2 to inicate that everything is okay.
+                          bsp_pin_digital_write(&pins.led_2, ENABLED);
+                      }
+                      else // Turn on the third led to indicate a problem.
+                      {
+                          bsp_pin_digital_write(&pins.led_3, ENABLED);
+                          log(ERROR, "File system could not initalize")
+                      }
+                  }
+                  running = 1;
+              }
+
+              if (1 == running)
+              {
+                  const uint8_t comm_buff_sz = 130;
+                  char          comm_buff[comm_buff_sz];
+
+                  do_stuff();
+
+
+                  // Blink to konw we are running
+                  bsp_pin_digital_toggle(&pins.led_1);
+
+                  // Check if any messages came in on the trace port.
+                  check_for_trace_msg();
+
+                  sw_delay(3);
+              }
+
+          }
+       }
+     */
     return 0;
 }
 

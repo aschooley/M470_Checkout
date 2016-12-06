@@ -32,75 +32,75 @@ extern "C" {
 
 typedef enum
 {
-	CARD_1,
-	CARD_2,
-	CARD_3,
-	CARD_4,
-	CARD_5,
-	CARD_6,
-	CARD_7,
-	CARD_8,
-	CARD_9,
-	CARD_10,
-	CARD_11,
-	CARD_12,
-	CARD_13,
-	CARD_14,
-	CARD_15,
-	CARD_16,
-	CARD_17,
-	CARD_18,
-	CARD_COUNT
+    CARD_1,
+    CARD_2,
+    CARD_3,
+    CARD_4,
+    CARD_5,
+    CARD_6,
+    CARD_7,
+    CARD_8,
+    CARD_9,
+    CARD_10,
+    CARD_11,
+    CARD_12,
+    CARD_13,
+    CARD_14,
+    CARD_15,
+    CARD_16,
+    CARD_17,
+    CARD_18,
+    CARD_COUNT
 } card_t;
 
 typedef enum
 {
-	THERMAL_ZONE_CARD_1,
-	THERMAL_ZONE_CARD_2,
-	THERMAL_ZONE_CARD_3,
-	THERMAL_ZONE_CARD_4,
-	THERMAL_ZONE_CARD_5,
-	THERMAL_ZONE_CARD_6,
-	THERMAL_ZONE_CARD_7,
-	THERMAL_ZONE_CARD_8,
-	THERMAL_ZONE_CARD_9,
-	THERMAL_ZONE_CAL_CELL_MANIFOLD_1,
-	THERMAL_ZONE_CAL_CELL_BAG_1,
-	THERMAL_ZONE_BAG_1,
-	THERMAL_ZONE_CARD_10,
-	THERMAL_ZONE_CARD_11,
-	THERMAL_ZONE_CARD_12,
-	THERMAL_ZONE_CARD_13,
-	THERMAL_ZONE_CARD_14,
-	THERMAL_ZONE_CARD_15,
-	THERMAL_ZONE_CARD_16,
-	THERMAL_ZONE_CARD_17,
-	THERMAL_ZONE_CARD_18,
-	THERMAL_ZONE_CAL_CELL_MANIFOLD_2,
-	THERMAL_ZONE_CAL_CELL_BAG_2,
-	THERMAL_ZONE_BAG_2,
-	THERMAL_ZONE_COUNT
+    THERMAL_ZONE_CARD_1,
+    THERMAL_ZONE_CARD_2,
+    THERMAL_ZONE_CARD_3,
+    THERMAL_ZONE_CARD_4,
+    THERMAL_ZONE_CARD_5,
+    THERMAL_ZONE_CARD_6,
+    THERMAL_ZONE_CARD_7,
+    THERMAL_ZONE_CARD_8,
+    THERMAL_ZONE_CARD_9,
+    THERMAL_ZONE_CAL_CELL_MANIFOLD_1,
+    THERMAL_ZONE_CAL_CELL_BAG_1,
+    THERMAL_ZONE_BAG_1,
+    THERMAL_ZONE_CARD_10,
+    THERMAL_ZONE_CARD_11,
+    THERMAL_ZONE_CARD_12,
+    THERMAL_ZONE_CARD_13,
+    THERMAL_ZONE_CARD_14,
+    THERMAL_ZONE_CARD_15,
+    THERMAL_ZONE_CARD_16,
+    THERMAL_ZONE_CARD_17,
+    THERMAL_ZONE_CARD_18,
+    THERMAL_ZONE_CAL_CELL_MANIFOLD_2,
+    THERMAL_ZONE_CAL_CELL_BAG_2,
+    THERMAL_ZONE_BAG_2,
+    THERMAL_ZONE_COUNT
 } thermal_zone_t;
 
 typedef enum
 {
-	CARD_BANK_1,
-	CARD_BANK_2,
-	CARD_BANK_COUNT
+    CARD_BANK_1,
+    CARD_BANK_2,
+    CARD_BANK_COUNT
 } card_bank_t;
 
 typedef enum
 {
-	BOX_CARD,
-	BOX_BAG,
-	BOX_COUNT
+    BOX_CARD,
+    BOX_BAG,
+    BOX_COUNT
 } box_t;
 
 typedef struct
 {
-	card_bank_t bank;
-	uint8_t index;
-	box_t box;
+    card_bank_t bank;
+    uint8_t     index;
+    box_t       box;
 } card_manifold_address_t;
 
 // *****************************************************************************
@@ -111,9 +111,9 @@ typedef struct
 // Public function prototypes
 // *****************************************************************************
 
-card_manifold_address_t bsp_card_get_card_location(card_t card);
+card_manifold_address_t bsp_card_get_card_location (card_t card);
 
-card_manifold_address_t bsp_card_get_thermal_location(thermal_zone_t zone);
+card_manifold_address_t bsp_card_get_thermal_location (thermal_zone_t zone);
 
 // *****************************************************************************
 // Public inline function definitions
@@ -124,4 +124,3 @@ card_manifold_address_t bsp_card_get_thermal_location(thermal_zone_t zone);
 #endif
 
 #endif // BSP_CARD_H
-

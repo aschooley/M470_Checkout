@@ -63,27 +63,27 @@ volatile static struct
 void init_uart(void)
 {
     EUSCI_A_UART_initParam uart_a1_param = {
-    	EUSCI_A_UART_CLOCKSOURCE_SMCLK,
-		52,
-		1,
-		73,
+        EUSCI_A_UART_CLOCKSOURCE_SMCLK,
+        52,
+        1,
+        73,
         EUSCI_A_UART_NO_PARITY,
         EUSCI_A_UART_LSB_FIRST,
         EUSCI_A_UART_ONE_STOP_BIT,
         EUSCI_A_UART_MODE,
-		EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
+        EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
     };
 
     EUSCI_A_UART_initParam uart_a0_param = {
-    	EUSCI_A_UART_CLOCKSOURCE_SMCLK,
-		52,
-		1,
-		73,
+        EUSCI_A_UART_CLOCKSOURCE_SMCLK,
+        52,
+        1,
+        73,
         EUSCI_A_UART_NO_PARITY,
         EUSCI_A_UART_LSB_FIRST,
         EUSCI_A_UART_ONE_STOP_BIT,
         EUSCI_A_UART_MODE,
-		EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
+        EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
     };
 /*
         GPIO_setAsInputPin(GPIO_PORT_P3, GPIO_PIN5);
@@ -120,7 +120,7 @@ void init_uart(void)
 int cout_data_channel(const char * _ptr)
 {
 
- //   bsp_pin_digital_write(&pins.uart_1w_sd_sel, LOW);
+    //   bsp_pin_digital_write(&pins.uart_1w_sd_sel, LOW);
 
     // Vars to iterate over the string
     uint16_t i, len;

@@ -87,7 +87,7 @@ void drv_rtc_init(void)
     EUSCI_B_SPI_enable(EUSCI_B0_BASE);
 
     // Enable the RTC chip's chip select.
-  //  bsp_pin_digital_write(&pins.rtc_cs, ENABLED);
+    //  bsp_pin_digital_write(&pins.rtc_cs, ENABLED);
 
     // Wait for the SPI port to be available.
     while (EUSCI_B_SPI_isBusy(EUSCI_B0_BASE))
@@ -107,7 +107,7 @@ void drv_rtc_init(void)
     EUSCI_B_SPI_transmitData(EUSCI_B0_BASE, 0x60);
 
     // Deselect the RTC chip.
-  //  bsp_pin_digital_write(&pins.rtc_cs, DISABLED);
+    //  bsp_pin_digital_write(&pins.rtc_cs, DISABLED);
 
     //delay(10);
 }
@@ -118,7 +118,7 @@ void drv_rtc_set_time_date(rtc_t * set_time)
     drv_rtc_convert_struct_to_array(set_time, set_time_array, BCD_ARRAY_SIZE);
 
     // Select the RTC chip on the SPI bus.
-  //  bsp_pin_digital_write(&pins.rtc_cs, ENABLED);
+    //  bsp_pin_digital_write(&pins.rtc_cs, ENABLED);
 
     // When the SPI port is available, set the address to write to.
     while (EUSCI_B_SPI_isBusy(EUSCI_B0_BASE))
@@ -140,7 +140,7 @@ void drv_rtc_set_time_date(rtc_t * set_time)
     }
 
     // Deselect the RTC chip.
- //   bsp_pin_digital_write(&pins.rtc_cs, DISABLED);
+    //   bsp_pin_digital_write(&pins.rtc_cs, DISABLED);
 }
 
 rtc_t drv_rtc_read_time_date(void)
@@ -150,7 +150,7 @@ rtc_t drv_rtc_read_time_date(void)
     uint8_t TimeDate[7];      //second,minute,hour,null,day,month,year
 
     // Enable the RTC chip on the SPI bus.
-  //  bsp_pin_digital_write(&pins.rtc_cs, ENABLED);
+    //  bsp_pin_digital_write(&pins.rtc_cs, ENABLED);
 
     // When the SPI port is available, select the starting address to read.
     while (EUSCI_B_SPI_isBusy(EUSCI_B0_BASE))
@@ -181,7 +181,7 @@ rtc_t drv_rtc_read_time_date(void)
         TimeDate[i] = EUSCI_B_SPI_receiveData(EUSCI_B0_BASE);
     }
     // Deselect the RTC chip.
- //   bsp_pin_digital_write(&pins.rtc_cs, DISABLED);
+    //   bsp_pin_digital_write(&pins.rtc_cs, DISABLED);
 
     // Create a RTC struct and stuff it with the converted bytes from the array.
     rtc_t current_time;
