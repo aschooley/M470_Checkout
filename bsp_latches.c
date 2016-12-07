@@ -37,27 +37,85 @@
 // Private static data definitions
 // *****************************************************************************
 
+/**
+ * All state data.
+ * @private
+ */
+static struct
+{
+    /** The card power enable and cal cell power enable share the same hardware.
+     *   Only one can be on at a time.
+     *   */
+    bool card_in_use;
+    bool cal_in_use;
+
+} g_latches = {false, false};
 // *****************************************************************************
 // Private static function and ISR prototypes
 // *****************************************************************************
 
+/**
+ * Puts the 16 bit address on the SPI bus to clock into the shift registers.
+ * @param[in] address to clock onto the spi bus
+ * @private
+ */
 static void send_address (uint16_t addr);
 
-static void modify_bitfield (uint16_t * bitfield, uint16_t modifier,
+/**
+ * Performs a bitmask operation to a bitfield.
+ * @param[out] bitfield to modify
+ * @param[in] bitmask to apply
+ * @param[in] operation to perform, add a bit or remove one.
+ * @private
+ */
+static void modify_bitfield (uint16_t * bitfield, uint16_t bitmask,
                              power_state_t operation);
+
+/**
+ * Check to see if the desired operation, power on/off, is allowed based on the current
+ * latch state and the desired card to operate on.
+ * @param[in] card_in_use the current card being used by the module
+ * @param[in] card to do the state operation on
+ * @param[in] state to operate on the card
+ * @retval true success, operation okay
+ * @retval false failure, can not perform operation
+ * @private
+ */
+
+static bool check_for_valid_operation (card_t card_in_use, card_t card,
+                                       power_state_t state);
+
+/**
+ * Update return current card if operation is ON and return out of bounds if
+ * operation is off.
+ * @note this assumes that you have already performed the above logic. This is
+ * to proceduralize this common operation.
+ * @param[in] card that was operated on
+ * @param[in] state that was performed
+ * @retval card on operation
+ * @retval CARD_COUNT off operation
+ * @private
+ */
+static card_t update_card_in_use (card_t card, power_state_t state);
 
 // *****************************************************************************
 // Private inline function definitions
 // *****************************************************************************
 
-static inline uint16_t create_bitmask(uint8_t value)
+/**
+ * Given the index number of device, turn it into a one bit bitfield to be used
+ * as a bitmask.
+ * @param[in] index to assingn a bit in a bitfield.
+ * @retval a bitfield
+ * @private
+ */
+static inline uint16_t create_bitmask(uint8_t index)
 {
-    // initalize it to 1, this is valve 1
-    uint16_t bitmap = 1;
-    // shift the 1 over card number of spaces, if valve one is addressed it will
-    // be shifted zero bits and essentially falls through.
-    bitmap = bitmap << value;
-    return bitmap;
+    // initalize it to 1, this is index 0.
+    uint16_t bitfield = 1;
+    // shift the bit over index number of spaces.
+    bitfield = bitfield << index;
+    return bitfield;
 }
 
 
@@ -70,38 +128,7 @@ bool bsp_set_valve_power(card_t card, power_state_t state)
     // Initalize the static varible to an out of bounds value.
     static card_t card_in_use = CARD_COUNT;
     // Initalize success to false.
-    bool success = false;
-
-    // Arguably the below conditinos could be put into only a success = true
-    // if statent and let the initization condition of false fall through.
-    // I chose to enumerate all conditions to help identify any possible
-    // logic error on my part.
-
-    // If no card is active you can turn one on.
-    if (CARD_COUNT == card_in_use && ON == state)
-    {
-        success = true;
-    }
-    // If a card is active you can not turn one on.
-    else if (CARD_COUNT != card_in_use && ON == state)
-    {
-        success = false;
-    }
-    // If a card is active you can only turn that one off.
-    else if (card == card_in_use && OFF == state)
-    {
-        success = true;
-    }
-    // You can not turn off any card but the on that is on.
-    else if (card != card_in_use && OFF == state)
-    {
-        success = false;
-    }
-    // If we got here something went wrong, above cases should have handled it.
-    else
-    {
-        log(ERROR, "valve power logic condition not accounted for, pgm error!");
-    }
+    bool success = check_for_valid_operation(card_in_use, card, state);
 
     // only do stuff if we in one of the two possible go conditions are met.
     if (success)
@@ -135,14 +162,8 @@ bool bsp_set_valve_power(card_t card, power_state_t state)
     // if the above operations succeded, update our state.
     if (success)
     {
-        if (ON == state)
-        {
-            card_in_use = card;
-        }
-        else
-        {
-            card_in_use = CARD_COUNT;
-        }
+        card_in_use = update_card_in_use(card, state);
+
     }
     return success;
 }
@@ -150,66 +171,117 @@ bool bsp_set_valve_power(card_t card, power_state_t state)
 
 bool bsp_set_card_power(card_t card, power_state_t state)
 {
+    // Initalize the static varible to an out of bounds value.
+    static card_t card_in_use = CARD_COUNT;
+    // Initalize success to false.
+    bool success = check_for_valid_operation(card_in_use, card, state);
 
-    card_manifold_address_t card_address    = bsp_card_get_card_location(card);
-    uint16_t                address_bitmask = create_bitmask(card_address.index);
-    uint16_t                latch_state     = 0;
-    modify_bitfield(&latch_state, address_bitmask, state);
+    if (success)
+    {
+        if (g_latches.cal_in_use)
+        {
+            success = false;
+        }
+    }
 
-    if (CARD_BANK_1 == card_address.bank)
+    if (success)
     {
-        bsp_pin_digital_write(&pins.card_en_latch_1, DISABLED);
-        send_address(latch_state);
-        bsp_pin_digital_write(&pins.card_en_latch_1, ENABLED);
+        card_manifold_address_t card_address = bsp_card_get_card_location(
+            card);
+        uint16_t address_bitmask = create_bitmask(
+            card_address.index);
+        uint16_t latch_state = 0;
+        modify_bitfield(&latch_state, address_bitmask, state);
+
+        if (CARD_BANK_1 == card_address.bank)
+        {
+            bsp_pin_digital_write(&pins.card_en_latch_1, DISABLED);
+            send_address(latch_state);
+            bsp_pin_digital_write(&pins.card_en_latch_1, ENABLED);
+        }
+        else if (CARD_BANK_2 == card_address.bank)
+        {
+            bsp_pin_digital_write(&pins.card_en_latch_2, DISABLED);
+            send_address(latch_state);
+            bsp_pin_digital_write(&pins.card_en_latch_2, ENABLED);
+        }
+        else
+        {
+            logf(ERROR, "Invalid card bank. Bank = %d", card_address.bank);
+        }
     }
-    else if (CARD_BANK_2 == card_address.bank)
+
+    // if the above operations succeded, update our state.
+    if (success)
     {
-        bsp_pin_digital_write(&pins.card_en_latch_2, DISABLED);
-        send_address(latch_state);
-        bsp_pin_digital_write(&pins.card_en_latch_2, ENABLED);
+        card_in_use           = update_card_in_use(card, state);
+        g_latches.card_in_use = (card_in_use != CARD_COUNT) ? true : false;
     }
-    else
-    {
-        logf(ERROR, "Invalid card bank. Bank = %d", card_address.bank);
-    }
+    return success;
 
 }
 
 bool bsp_set_cal_cell_power(card_t card, cal_cell_t cal_cell_type,
                             power_state_t state)
 {
-    // All we need is the bank.
-    card_manifold_address_t card_address = bsp_card_get_card_location(card);
-    uint16_t                address_bitmask;
-    uint16_t                latch_state = 0;
 
-    if (CAL_CELL_MANIFOLD == cal_cell_type || CAL_CELL_BAG == cal_cell_type)
+    // Initalize the static varible to an out of bounds value.
+    static card_t card_in_use = CARD_COUNT;
+    // Initalize success to false.
+    bool success = check_for_valid_operation(card_in_use, card, state);
+
+    if (success)
     {
-        address_bitmask = create_bitmask(cal_cell_type);
-    }
-    else
-    {
-        logf(ERROR, "Invalid cal cell type.  Type = &d", cal_cell_type);
+        if (g_latches.card_in_use)
+        {
+            success = false;
+        }
     }
 
-    modify_bitfield(&latch_state, address_bitmask, state);
+    // only do stuff if we in one of the two possible go conditions are met.
+    if (success)
+    {
+        // All we need is the bank.
+        card_manifold_address_t card_address = bsp_card_get_card_location(card);
+        uint16_t                address_bitmask;
+        uint16_t                latch_state = 0;
 
-    if (CARD_BANK_1 == card_address.bank)
-    {
-        bsp_pin_digital_write(&pins.card_en_latch_1, DISABLED);
-        send_address(latch_state);
-        bsp_pin_digital_write(&pins.card_en_latch_1, ENABLED);
+        if (CAL_CELL_MANIFOLD == cal_cell_type || CAL_CELL_BAG == cal_cell_type)
+        {
+            address_bitmask = create_bitmask(cal_cell_type);
+        }
+        else
+        {
+            logf(ERROR, "Invalid cal cell type.  Type = &d", cal_cell_type);
+        }
+
+        modify_bitfield(&latch_state, address_bitmask, state);
+
+        if (CARD_BANK_1 == card_address.bank)
+        {
+            bsp_pin_digital_write(&pins.card_en_latch_1, DISABLED);
+            send_address(latch_state);
+            bsp_pin_digital_write(&pins.card_en_latch_1, ENABLED);
+        }
+        else if (CARD_BANK_2 == card_address.bank)
+        {
+            bsp_pin_digital_write(&pins.card_en_latch_2, DISABLED);
+            send_address(latch_state);
+            bsp_pin_digital_write(&pins.card_en_latch_2, ENABLED);
+        }
+        else
+        {
+            logf(ERROR, "Invalid card bank. Bank = %d", card_address.bank);
+        }
     }
-    else if (CARD_BANK_2 == card_address.bank)
+
+    // if the above operations succeded, update our state.
+    if (success)
     {
-        bsp_pin_digital_write(&pins.card_en_latch_2, DISABLED);
-        send_address(latch_state);
-        bsp_pin_digital_write(&pins.card_en_latch_2, ENABLED);
+        card_in_use          = update_card_in_use(card, state);
+        g_latches.cal_in_use = (card_in_use != CARD_COUNT) ? true : false;
     }
-    else
-    {
-        logf(ERROR, "Invalid card bank. Bank = %d", card_address.bank);
-    }
+    return success;
 }
 
 
@@ -217,59 +289,76 @@ bool bsp_set_fluidics_power(card_t card, fluidics_t fluidics_object,
                             power_state_t state)
 {
 
-    // All we care about is which bank it is in.
-    card_manifold_address_t card_address = bsp_card_get_card_location(card);
+    // Initalize the static varible to an out of bounds value.
+    static card_t card_in_use = CARD_COUNT;
+    // Initalize success to false.
+    bool success = check_for_valid_operation(card_in_use, card, state);
 
-    uint16_t address_bitmask = 0;
+    // only do stuff if we in one of the two possible go conditions are met.
+    if (success)
+    {
+        // All we care about is which bank it is in.
+        card_manifold_address_t card_address = bsp_card_get_card_location(card);
 
-    if (FLUIDICS_COUNT >= fluidics_object)
-    {
-        address_bitmask = create_bitmask(fluidics_object);
-    }
-    else
-    {
-        logf(ERROR, "Invalid fluidics object. Object = %d", fluidics_object);
+        uint16_t address_bitmask = 0;
+
+        if (FLUIDICS_COUNT >= fluidics_object)
+        {
+            address_bitmask = create_bitmask(fluidics_object);
+        }
+        else
+        {
+            logf(ERROR, "Invalid fluidics object. Object = %d", fluidics_object);
+        }
+
+        uint16_t      retrieved_latch_state = 0;
+        const pin_t * pin;
+
+        if (CARD_BANK_1 == card_address.bank)
+        {
+            // Initalize memory for this latch, it will not be reinitalized since it is static.
+            static uint16_t latch_state = 0;
+            // Update the saved latch state with the modificaiton.
+            modify_bitfield(&latch_state, address_bitmask, state);
+            // Return the new latch state.
+            retrieved_latch_state = latch_state;
+            // Return the correct pin to use.
+            pin = &pins.fluidics_en_latch_bag_1;
+        }
+        else if (CARD_BANK_2 == card_address.bank)
+        {
+
+            // Initalize memory for this latch, it will not be reinitalized since it is static.
+            static uint16_t latch_state = 0;
+            // Update the saved latch state with the modificaiton.
+            modify_bitfield(&latch_state, address_bitmask, state);
+            // Return the new latch state.
+            retrieved_latch_state = latch_state;
+            // Return the correct pin to use.
+            pin = &pins.fluidics_en_latch_bag_2;
+        }
+        else
+        {
+            logf(ERROR, "Invalid card bank. Bank = %d", card_address.bank);
+        }
+        // Do the operation.
+        bsp_pin_digital_write(pin, DISABLED);
+        send_address(retrieved_latch_state);
+        bsp_pin_digital_write(pin, ENABLED);
     }
 
-    uint16_t      retrieved_latch_state = 0;
-    const pin_t * pin;
+    // if the above operations succeded, update our state.
+    if (success)
+    {
+        card_in_use = update_card_in_use(card, state);
 
-    if (CARD_BANK_1 == card_address.bank)
-    {
-        // Initalize memory for this latch, it will not be reinitalized since it is static.
-        static uint16_t latch_state = 0;
-        // Update the saved latch state with the modificaiton.
-        modify_bitfield(&latch_state, address_bitmask, state);
-        // Return the new latch state.
-        retrieved_latch_state = latch_state;
-        // Return the correct pin to use.
-        pin = &pins.fluidics_en_latch_bag_1;
     }
-    else if (CARD_BANK_2 == card_address.bank)
-    {
-
-        // Initalize memory for this latch, it will not be reinitalized since it is static.
-        static uint16_t latch_state = 0;
-        // Update the saved latch state with the modificaiton.
-        modify_bitfield(&latch_state, address_bitmask, state);
-        // Return the new latch state.
-        retrieved_latch_state = latch_state;
-        // Return the correct pin to use.
-        pin = &pins.fluidics_en_latch_bag_2;
-    }
-    else
-    {
-        logf(ERROR, "Invalid card bank. Bank = %d", card_address.bank);
-    }
-    // Do the operation.
-    bsp_pin_digital_write(pin, DISABLED);
-    send_address(retrieved_latch_state);
-    bsp_pin_digital_write(pin, ENABLED);
+    return success;
 }
 
 bool bsp_set_heater_power(thermal_zone_t zone, power_state_t state)
 {
-
+    bool                    success      = true;
     card_manifold_address_t zone_address = bsp_card_get_thermal_location(zone);
 
     uint16_t      address_bitmask       = create_bitmask(zone_address.index);
@@ -331,6 +420,8 @@ bool bsp_set_heater_power(thermal_zone_t zone, power_state_t state)
     bsp_pin_digital_write(pin, DISABLED);
     send_address(retrieved_latch_state);
     bsp_pin_digital_write(pin, ENABLED);
+
+    return success;
 }
 
 // *****************************************************************************
@@ -396,6 +487,63 @@ static void modify_bitfield (uint16_t * bitfield, uint16_t bitmask,
     {
         logf(ERROR, "bitmask operation unknown.  Operation = %d", operation);
     }
+}
+
+static bool check_for_valid_operation(card_t card_in_use, card_t card,
+                                      power_state_t state)
+{
+    bool success = false;
+
+    // Arguably the below conditinos could be put into only a success = true
+    // if statent and let the initization condition of false fall through.
+    // I chose to enumerate all conditions to help identify any possible
+    // logic error on my part.
+
+    // If no card is active you can turn one on.
+    if (CARD_COUNT == card_in_use && ON == state)
+    {
+        success = true;
+    }
+    // If a card is active you can not turn one on.
+    else if (CARD_COUNT != card_in_use && ON == state)
+    {
+        success = false;
+    }
+    // If a card is active you can only turn that one off.
+    else if (card == card_in_use && OFF == state)
+    {
+        success = true;
+    }
+    // You can not turn off any card but the on that is on.
+    else if (card != card_in_use && OFF == state)
+    {
+        success = false;
+    }
+    // If we got here something went wrong, above cases should have handled it.
+    else
+    {
+        logf(
+            ERROR,
+            "valve power logic condition not accounted for. card_in_use = %d, card = %d, state = %d",
+            card_in_use, card, state);
+    }
+
+    return success;
+}
+
+static card_t update_card_in_use(card_t card, power_state_t state)
+{
+    card_t card_in_use;
+
+    if (ON == state)
+    {
+        card_in_use = card;
+    }
+    else
+    {
+        card_in_use = CARD_COUNT;
+    }
+    return card_in_use;
 }
 
 // *****************************************************************************
